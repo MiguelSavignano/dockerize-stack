@@ -1,4 +1,0 @@
-require 'dockerize_rails_generator/generator'
-
-module DockerizeRailsGenerator
-end
