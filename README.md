@@ -1,6 +1,6 @@
 # Dockerize Stack for development
 
-This it's a generator for generate docker files for application in development
+This it's a generator for generate Dockerfile and docker-compose for your application in development
 
 ## Install
 ```
@@ -114,6 +114,7 @@ bundle exec rails server -p 3000 -b 0.0.0.0
 ```
 
 ## TODO
+- [ ] Add phoenix generator
 - [ ] Solve use rails generator in container
 - [ ] Add integrations with all database types rails new supported ([mysql/postgresql/sqlite3/oracle/frontbase/ibm_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc])
 - [ ] Integrate Build with private repository in the generator
