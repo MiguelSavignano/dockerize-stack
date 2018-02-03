@@ -14,13 +14,12 @@ gem install dockerize-stack
 ```
 
 ## Stacks available
-|                                | mysql | postgresql | mongodb |
-|---|---|---|
-| Rails 5.1 (Ruby)               |   *   |     *      |         |
-| Symfony (PHP)                  |       |            |         |
-| Phoenixframework (Elixir)      |       |            |         |
-| Django (Python)                |       |            |         |
-| Express (Node)                 |       |            |         |
+
+- [x] Rails 5.1 (Ruby)
+- [ ] Symfony (PHP)
+- [ ] Phoenixframework (Elixir)
+- [ ] Django (Python)
+- [ ] Express (Node)
 
 ## Usage
 ```sh
