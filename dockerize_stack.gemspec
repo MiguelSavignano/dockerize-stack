@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.description = "Generate Dockerfile and docker-compose for your application"
   s.authors     = ["Miguel Savignano"]
   s.email       = 'migue.masx@gmail.com'
-  s.files       = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README.md) + ["lib/rails/templates/Dockerfile.erb"]
+  s.files       = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README.md)
   s.homepage    = 'https://github.com/MiguelSavignano/dockerize-rails-generator'
   s.license     = 'MIT'
   s.require_paths = ['lib']
