@@ -1,11 +1,11 @@
 require 'thor'
 
-class Generator < Thor
+class DockerizeRails < Thor
   include Thor::Actions
   attr_accessor :mainteiner, :ruby_version, :database
 
   def self.source_root
-    File.expand_path('../templates', __FILE__)
+    File.dirname(__FILE__)
   end
 
   def set_variables
@@ -19,11 +19,11 @@ class Generator < Thor
   def generate_files
     set_variables
 
-    template "Dockerfile.erb", "docker/development/Dockerfile"
-    template "entrypoint.sh", "docker/development/entrypoint.sh"
-    template "docker-compose.yml.erb", "docker-compose.yml"
-    template "database_docker.yml.erb", "config/database_docker.yml"
-    template ".dockerignore", ".dockerignore"
+    template "templates/Dockerfile.erb", "docker/development/Dockerfile"
+    template "templates/entrypoint.sh", "docker/development/entrypoint.sh"
+    template "templates/docker-compose.yml.erb", "docker-compose.yml"
+    template "templates/database_docker.yml.erb", "config/database_docker.yml"
+    template "templates/dockerignore", ".dockerignore"
     append_to_file '.gitignore', "
 volumes"
   end
