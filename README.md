@@ -4,11 +4,11 @@ This it's a generator for generate docker files for rails in developer mode
 
 ## Install
 ```
-gem install dockerize_rails_generator
+gem install dockerize-stack
 ```
 ## Usage
 ```sh
-dockerize_rails_generator init
+dockerize_stack rails
 ```
 
 This script ask you:
