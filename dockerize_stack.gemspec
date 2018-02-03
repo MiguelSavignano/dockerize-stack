@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Miguel Savignano"]
   s.email       = 'migue.masx@gmail.com'
   s.files       = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README.md)
-  s.homepage    = 'https://github.com/MiguelSavignano/dockerize-rails-generator'
+  s.homepage    = 'https://github.com/MiguelSavignano/dockerize-stack'
   s.license     = 'MIT'
   s.require_paths = ['lib']
   s.add_runtime_dependency 'thor', '~> 0'
