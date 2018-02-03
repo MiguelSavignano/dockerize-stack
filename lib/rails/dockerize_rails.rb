@@ -8,14 +8,11 @@ class DockerizeRails < Thor
     File.dirname(__FILE__)
   end
 
-  def set_variables
+  desc 'generate_files', 'generate docker files for rails application'
+  def generate_files
     @ruby_version = ask("Ruby Version (default 2.4.3):")
     @ruby_version = "2.4.3" if @ruby_version == ""
     @database     = ask("What is your Database?", limited_to: ["mysql", "postgresql"])
-  end
-
-  def generate_files
-    set_variables
 
     template "templates/Dockerfile.erb", "docker/development/Dockerfile"
     template "templates/entrypoint.sh", "docker/development/entrypoint.sh"
