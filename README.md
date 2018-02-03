@@ -1,6 +1,6 @@
-# Dockerize Rails for development
+# Dockerize Stack for development
 
-This it's a generator for generate docker files for rails in developer mode
+This it's a generator for generate docker files for application in development
 
 ## Install
 ```

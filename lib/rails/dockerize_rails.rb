@@ -2,15 +2,13 @@ require 'thor'
 
 class DockerizeRails < Thor
   include Thor::Actions
-  attr_accessor :mainteiner, :ruby_version, :database
+  attr_accessor :ruby_version, :database
 
   def self.source_root
     File.dirname(__FILE__)
   end
 
   def set_variables
-    @mainteiner   = ask("Mainteiner email:")
-    @mainteiner   = "example@mail.com" if @mainteiner == ""
     @ruby_version = ask("Ruby Version (default 2.4.3):")
     @ruby_version = "2.4.3" if @ruby_version == ""
     @database     = ask("What is your Database?", limited_to: ["mysql", "postgresql"])

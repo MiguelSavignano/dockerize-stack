@@ -1,5 +1,4 @@
 FROM ruby:<%= ruby_version %>
-LABEL mainteiner=<%= mainteiner %>
 
 # install common dev libs
 RUN apt-get update -qq && apt-get install -y \
