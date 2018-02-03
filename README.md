@@ -2,10 +2,26 @@
 
 This it's a generator for generate Dockerfile and docker-compose for your application in development
 
+## Why?
+Not all people have in their localhost the same stack used by your application;
+for build a quick stack for your development enviroment docker is the best tool you can use, but you need to configure the Dockerfile docker-compose, persisted database data, set the entrypoint...
+
+This generator help you to have a basic template for your stack; focusing on develepment enviroment.
+
 ## Install
 ```
 gem install dockerize-stack
 ```
+
+## Stacks available
+|                                | mysql | postgresql | mongodb |
+|---|---|---|
+| Rails 5.1 (Ruby)               |   *   |     *      |         |
+| Symfony (PHP)                  |       |            |         |
+| Phoenixframework (Elixir)      |       |            |         |
+| Django (Python)                |       |            |         |
+| Express (Node)                 |       |            |         |
+
 ## Usage
 ```sh
 dockerize_stack rails
