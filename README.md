@@ -12,7 +12,6 @@ dockerize_stack rails
 ```
 
 This script ask you:
-- Mainteiner name
 - Ruby version
 - Database type
 
@@ -30,7 +29,6 @@ example files generate:
 ### Dockerfile
 ```
 FROM ruby:2.4.3
-LABEL mainteiner=example@mail.com
 
 # install commond dev libs
 RUN apt-get update -qq && apt-get install -y \
