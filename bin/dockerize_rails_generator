@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'dockerize_rails_generator'
+
+DockerizeRailsGenerator.run
