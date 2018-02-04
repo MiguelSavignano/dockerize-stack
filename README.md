@@ -3,8 +3,7 @@
 This it's a generator for generate Dockerfile and docker-compose for your application in development
 
 ## Why?
-Not all people have in their localhost the same stack used by your application;
-for build a quick stack for your development enviroment docker is the best tool you can use, but you need to configure the Dockerfile docker-compose, persisted database data, set the entrypoint...
+For build a quick stack for your development enviroment docker is the best tool you can use, but you need to configure the Dockerfile docker-compose, persisted database data, set the entrypoint...
 
 This generator help you to have a basic template for your stack; focusing on develepment enviroment.
 
@@ -39,93 +38,6 @@ example files generate:
 /.dockerignore
 /docker-compose.yml
 /config/database_docker.yml
-```
-
-### Dockerfile
-```
-FROM ruby:2.4.3
-
-# install commond dev libs
-RUN apt-get update -qq && apt-get install -y \
-  build-essential \
-  libpq-dev \
-  git-all
-
-# install editors
-RUN apt-get install -y \
-  nano \
-  vim
-
-# http libs for download
-RUN apt-get install -y \
-  curl \
-  ca-certificates \
-  openssl \
-  apt-transport-https \
-  gnupg2
-
-# install postgresql
-RUN apt-get install -y postgresql-client
-
-# install node 8.9.1 LTS
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash -
-RUN apt-get update && apt-get install -y nodejs
-
-# install yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && apt-get install yarn
-
-RUN mkdir /app
-WORKDIR /app
-ADD . /app
-```
-
-### docker-compose.yml
-``` yml
-version: '3'
-services:
-  web:
-    build: ./docker/development
-    container_name: web
-    stdin_open: true
-    tty: true
-    command: "bash ./docker/development/entrypoint.sh"
-    volumes:
-      - .:/app
-      - ./volumes/bundle:/usr/local/bundle
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    # env_file:
-    #   - web.env
-  db:
-    image: postgres:9.5.9
-    # ports:
-    #   - "5432:5432"
-    volumes:
-      - ./volumes/postgresql:/var/lib/postgresql/data
-  redis:
-    image: redis
-    # ports:
-    #   - "6379:6379"
-  mailcatcher:
-    image: schickling/mailcatcher
-    ports:
-      - 1025:1025
-      - 1080:1080
-```
-
-### entrypoint.sh
-Entrypoint it's the command execute when your web container start.
-
-```sh
-bundle install
-yarn install
-rake rake db:create db:migrate
-rm -f tmp/pids/server.pid
-bundle exec rails server -p 3000 -b 0.0.0.0
 ```
 
 ## TODO
