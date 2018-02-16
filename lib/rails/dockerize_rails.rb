@@ -17,7 +17,7 @@ class DockerizeRails < Thor
     template "templates/Dockerfile.erb", "docker/development/Dockerfile"
     template "templates/entrypoint.sh", "docker/development/entrypoint.sh"
     template "templates/docker-compose.yml.erb", "docker-compose.yml"
-    template "templates/database_docker.yml.erb", "config/database_docker.yml"
+    template "templates/database-docker.yml.erb", "config/database-docker.yml"
     template "templates/dockerignore", ".dockerignore"
     append_to_file '.gitignore', "
 volumes"

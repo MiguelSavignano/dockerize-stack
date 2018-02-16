@@ -1,6 +1,7 @@
 # Install the pg driver:
 #   gem install pg
 #
+<% if database == "postgresql" %>
 default: &default
   pool: 5
   timeout: 5000
@@ -9,7 +10,16 @@ default: &default
   host: db
   username: postgres
   password:
-
+<% elsif database == "mysql" %>
+default: &default
+  pool: 5
+  timeout: 5000
+  adapter: postgresql
+  encoding: unicode
+  host: db
+  username: postgres
+  password:
+<% end %>
 development:
   <<: *default
   database: myapp_development
