@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require 'dockerize_stack'
+require 'dockerize-stack'
 
 DockerizeStack::Command.start

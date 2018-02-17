@@ -2,7 +2,7 @@ require File.expand_path("../lib/version", __FILE__)
 Gem::Specification.new do |s|
   s.name        = 'dockerize-stack'
   s.version     = DockerizeStack::VERSION
-  s.executables << 'dockerize_stack'
+  s.executables << 'dockerize-stack'
   s.date        = '2018-02-03'
   s.summary     = "DockerizeStack"
   s.description = "Generate Dockerfile and docker-compose for your application"
