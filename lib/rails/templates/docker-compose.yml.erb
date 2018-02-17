@@ -44,13 +44,11 @@ services:
 
 # USAGE
 
-# docker-compose up
-
-# enter in the container for run rails console or rake tasks
+# execute a container for run rails console or rake tasks
 # docker-compose run web bash
 
 # attach the container when use binding.pry
 # docker attach web
 
 # when run rails generator you need to run
-# sudo chown -R $USER:$USER .
+# sudo chown -R $USER:$USER $(ls | grep -v volumes)
