@@ -21,6 +21,7 @@ class DockerizeRails < Thor
     template "templates/dockerignore", ".dockerignore"
     append_to_file '.gitignore', "
 volumes"
+    puts "Update your database.yml based in database-docker.yml"
   end
 
 end
