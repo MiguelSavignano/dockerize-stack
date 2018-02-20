@@ -44,4 +44,4 @@ example files generate:
 - [ ] Add phoenix generator
 - [ ] Solve use rails generator in container
 - [ ] Add integrations with all database types rails new supported ([mysql/postgresql/sqlite3/oracle/frontbase/ibm_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc])
-- [ ] Integrate Build with private repository in the generator
+- [x] Integrate Build with private repository in the generator

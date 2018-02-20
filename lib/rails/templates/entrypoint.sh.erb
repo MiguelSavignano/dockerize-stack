@@ -1,0 +1,15 @@
+gem install bundler
+<% if @id_rsa == 'yes' %>
+	mkdir /root/.ssh
+	cp id_rsa /root/.ssh/id_rsa
+	touch /root/.ssh/known_hosts
+	eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa && ssh-add -l && ssh-add -L && echo "Host github.com\n\tIdentityFile ~/.ssh/id_rsa" >> /root/.ssh/config
+	ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
+<% end %>
+
+bundle install
+yarn install
+
+rake db:create db:migrate
+rm -f tmp/pids/server.pid
+bundle exec rails server -p 3000 -b 0.0.0.0
