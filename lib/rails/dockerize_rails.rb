@@ -13,7 +13,8 @@ class DockerizeRails < Thor
     @ruby_version = ask("Ruby Version (default 2.4.3):")
     @ruby_version = "2.4.3" if @ruby_version == ""
     @database     = ask("What is your Database?", limited_to: ["mysql", "postgresql"])
-    @id_rsa       = ask("Would you need your id_rsa file?", limited_to: ["yes", "no"])
+    @id_rsa       = ask("Would you need your id_rsa file? Type yes or no (default no):")
+    @id_rsa       = "no" if @id_rsa == ""
 
     template "templates/Dockerfile.erb", "docker/development/Dockerfile"
     template "templates/entrypoint.sh.erb", "docker/development/entrypoint.sh"
