@@ -22,11 +22,14 @@ class DockerizeRails < Thor
     template "templates/database-docker.yml.erb", "config/database-docker.yml"
     template "templates/dockerignore.erb", ".dockerignore"
 
-    append_to_file '.gitignore', "volumes"
+    append_to_file '.gitignore', "
+volumes"
     if @id_rsa == 'yes'
-      template "templates/id_rsa.sample", "id_rsa.sample"      
-      append_to_file '.gitignore', "id_rsa"
-      append_to_file '.gitignore', "id_rsa.sample"
+      template "templates/id_rsa.sample", "docker/development/id_rsa.sample"      
+      append_to_file '.gitignore', "
+docker/development/id_rsa"
+      append_to_file '.gitignore', "
+docker/development/id_rsa.sample"
     end
     
     puts "Update your database.yml based in database-docker.yml"

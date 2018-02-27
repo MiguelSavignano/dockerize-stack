@@ -39,3 +39,12 @@ RUN apt-get update && apt-get install yarn
 RUN mkdir /app
 WORKDIR /app
 ADD . /app
+
+<% if @id_rsa == 'yes' %>
+RUN mkdir /root/.ssh
+RUN cp id_rsa /root/.ssh/id_rsa
+# RUN chmod 0644 /root/.ssh/id_rsa
+RUN touch /root/.ssh/known_hosts
+RUN eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa && ssh-add -l && ssh-add -L && echo "Host github.com\n\tIdentityFile ~/.ssh/id_rsa" >> /root/.ssh/config
+RUN ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
+<% end %>
