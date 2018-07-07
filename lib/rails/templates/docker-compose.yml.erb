@@ -8,7 +8,7 @@ services:
     command: "bash ./docker/development/entrypoint.sh"
     volumes:
       - .:/app
-      - ./volumes/bundle:/usr/local/bundle
+      - ./volumes/bundle:/usr/local/rvm/gems/ruby-<%= ruby_version %>
     ports:
       - "3000:3000"
     depends_on:

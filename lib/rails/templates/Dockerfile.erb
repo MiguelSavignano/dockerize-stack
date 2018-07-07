@@ -1,31 +1,41 @@
-FROM ruby:<%= ruby_version %>
+FROM debian:9-slim
+
+ENV PROJECT=project_name
+ENV RUBY_VERSION=<%= ruby_version %>
+
+SHELL ["/bin/bash", "-c"]
+
+ENV PATH /usr/local/rvm/gems/ruby-${RUBY_VERSION}/bin:/usr/local/rvm/gems/ruby-${RUBY_VERSION}@global/bin:/usr/local/rvm/rubies/ruby-${RUBY_VERSION}/bin:/usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
+
+ENV GEM_HOME /usr/local/rvm/gems/ruby-${RUBY_VERSION}
 
 # install common dev libs
-RUN apt-get update -qq && apt-get install -y \
-  build-essential \
-  libpq-dev \
-  git-all
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    git \
+    vim \
+    curl \
+    ca-certificates \
+    openssl \
+    apt-transport-https \
+    gnupg2 \
+    default-libmysqlclient-dev \
+    procps \
+    dirmngr \
+    openssh-client \
+    libxml2-dev \
+    ruby-libxml
 
-# install editors
-RUN apt-get install -y \
-  nano \
-  vim
+RUN apt-get clean -y
 
-# http libs for download
-RUN apt-get install -y \
-  curl \
-  ca-certificates \
-  openssl \
-  apt-transport-https \
-  gnupg2
-
-<% if database == "mysql" %>
-# install mysql
-RUN apt-get install -y mysql-client libmysqlclient-dev
-<% elsif database == "postgresql" %>
-# install postgresql
-RUN apt-get install -y postgresql-client
-<% end %>
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+RUN curl -L https://get.rvm.io | /bin/bash -s stable
+RUN source /etc/profile.d/rvm.sh
+RUN rvm requirements
+RUN rvm install ${RUBY_VERSION}
+RUN rvm use --default ${RUBY_VERSION}
+# RUN rvm gemset create ${PROJECT} && rvm gemset use ${PROJECT}
 
 # install node 8.9.1 LTS
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash -
@@ -36,9 +46,13 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install yarn
 
-RUN mkdir /app
-WORKDIR /app
-ADD . /app
+<% if database == "mysql" %>
+# install mysql
+RUN apt-get install -y mysql-client
+<% elsif database == "postgresql" %>
+# install postgresql
+RUN apt-get install -y postgresql-client
+<% end %>
 
 <% if @id_rsa == 'yes' %>
 RUN mkdir /root/.ssh
@@ -48,3 +62,6 @@ RUN touch /root/.ssh/known_hosts
 RUN eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa && ssh-add -l && ssh-add -L && echo "Host github.com\n\tIdentityFile ~/.ssh/id_rsa" >> /root/.ssh/config
 RUN ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
 <% end %>
+RUN mkdir /app
+WORKDIR /app
+ADD . /app
