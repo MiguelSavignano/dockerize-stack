@@ -11,6 +11,10 @@ This generator help you to have a basic template for your stack; focusing on dev
 ```
 gem install dockerize-stack
 ```
+or
+```
+docker pull devmasx/dockerize-stack
+```
 
 ## Stacks available
 
@@ -23,6 +27,10 @@ gem install dockerize-stack
 ## Usage
 ```sh
 dockerize-stack rails
+```
+or use docker image
+```
+docker run --user $(id -u) -it -v $(pwd):/usr/src devmasx/dockerize-stack rails
 ```
 
 This script ask you:
