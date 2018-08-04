@@ -10,15 +10,15 @@ class DockerizeRails < Thor
 
   desc 'generate_files', 'generate docker files for rails application'
   def generate_files
-    ruby_version = ask('Ruby Version (default 2.4.3):')
-    ruby_version = '2.4.3' if ruby_version == ''
+    ruby_version = ask('Ruby Version (default 2.5.1):')
+    ruby_version = '2.5.1-slim' if ruby_version == ''
     database     = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
     id_rsa       = ask('Would you need your id_rsa file to connect with GitHub? Type yes or no (default no):')
     id_rsa       = 'no' if id_rsa == ''
     render_templates(ruby_version: ruby_version, database: database, id_rsa: id_rsa)
   end
 
-  def render_templates(ruby_version: '2.4.3', database: 'postgresql', id_rsa: 'no')
+  def render_templates(ruby_version: '2.5.1-slim', database: 'postgresql', id_rsa: 'no')
     @ruby_version = ruby_version
     @database     = database
     @id_rsa       = id_rsa

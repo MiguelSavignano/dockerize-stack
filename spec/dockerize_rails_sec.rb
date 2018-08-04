@@ -13,9 +13,9 @@ describe "DockerizeRails" do
   #   generator.generate_files
   # end
 
-  # it "#render_templates" do
-  #   generator = DockerizeRails.new
-  #   generator.render_templates
-  # end
+  it "#render_templates" do
+    generator = DockerizeRails.new
+    generator.render_templates
+  end
 
 end
