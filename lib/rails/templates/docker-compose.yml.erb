@@ -1,7 +1,9 @@
 version: '3'
 services:
   web:
-    build: ./docker/development
+    build:
+      dockerfile: ./docker/development/Dockerfile
+      context: ./
     container_name: web
     stdin_open: true
     tty: true
@@ -32,20 +34,20 @@ services:
     volumes:
       - ./volumes/postgresql:/var/lib/postgresql/data
 <% end %>
-  redis:
-    image: redis
-    # ports:
-    #   - "6379:6379"
-  mailcatcher:
-    image: schickling/mailcatcher
-    ports:
-      - 1025:1025
-      - 1080:1080
+  # redis:
+  #   image: redis
+  #     ports:
+  #       - "6379:6379"
+  # mailcatcher:
+  #   image: schickling/mailcatcher
+  #   ports:
+  #     - 1025:1025
+  #     - 1080:1080
 
 # USAGE
 
 # execute a container for run rails console or rake tasks
-# docker-compose run web bash
+# docker-compose run --rm web bash
 
 # attach the container when use binding.pry
 # docker attach web
