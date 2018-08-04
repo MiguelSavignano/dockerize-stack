@@ -23,20 +23,20 @@ class DockerizeRails < Thor
     @database     = database
     @id_rsa       = id_rsa
 
-    template 'templates/Dockerfile.erb', 'docker/development/Dockerfile'
-    template 'templates/entrypoint.sh.erb', 'docker/development/entrypoint.sh'
+    template 'templates/docker/development/Dockerfile.erb', 'docker/development/Dockerfile'
+    template 'templates/docker/development/entrypoint.sh.erb', 'docker/development/entrypoint.sh'
     template 'templates/docker-compose.yml.erb', 'docker-compose.yml'
-    template 'templates/database-docker.yml.erb', 'config/database-docker.yml'
+    template 'templates/config/database-docker.yml.erb', 'config/database-docker.yml'
     template 'templates/dockerignore.erb', '.dockerignore'
 
     append_to_file '.gitignore', '
 volumes'
     if @id_rsa == 'yes'
-      template 'templates/id_rsa.sample', 'docker/development/id_rsa.sample'
+      template 'templates/id_rsa.sample', 'id_rsa.sample'
       append_to_file '.gitignore', '
-docker/development/id_rsa'
+id_rsa'
       append_to_file '.gitignore', '
-docker/development/id_rsa.sample'
+id_rsa.sample'
     end
 
     puts 'Update your database.yml based in database-docker.yml'
