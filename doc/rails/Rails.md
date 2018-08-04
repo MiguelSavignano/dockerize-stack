@@ -38,7 +38,10 @@ When Using docker-compose run web rails g model ...
 The files create in the container the owner it's root user;
 if you use this files outside the container you can't modify them
 
-Solution: ?
+Solution:
+```
+docker-compose run --user $(id -u) web bash
+```
 
 ### Pids
 
