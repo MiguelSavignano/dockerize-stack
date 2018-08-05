@@ -28,7 +28,7 @@ services:
       - ./volumes/mysql:/var/lib/mysql
 <% elsif database == "postgresql" %>
   db:
-    image: postgres:9.5.9
+    image: postgres:9.6
     # ports:
     #   - "5432:5432"
     volumes:
