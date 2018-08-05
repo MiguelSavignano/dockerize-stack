@@ -51,7 +51,6 @@ id_rsa.sample'
     directory 'templates/docker/production', 'docker/production'
     directory 'templates/docker/kubernetes', 'docker/kubernetes'
 
-    template 'templates/docker/production/rails/Dockerfile.erb', 'docker/production/rails/Dockerfile'
-
+    template 'templates/docker/Dockerfile.production.erb', 'docker/production/rails/Dockerfile'
   end
 end
