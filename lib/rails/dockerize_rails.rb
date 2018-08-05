@@ -16,6 +16,9 @@ class DockerizeRails < Thor
     id_rsa       = ask('Would you need your id_rsa file to connect with GitHub? Type yes or no (default no):')
     id_rsa       = 'no' if id_rsa == ''
     render_templates(ruby_version: ruby_version, database: database, id_rsa: id_rsa)
+    render_production_templates(ruby_version: ruby_version, database: database, id_rsa: id_rsa)
+
+    puts 'Update your database.yml based in database-docker.yml'
   end
 
   def render_templates(ruby_version: '2.5.1-slim', database: 'postgresql', id_rsa: 'no')
@@ -38,8 +41,16 @@ id_rsa'
       append_to_file '.gitignore', '
 id_rsa.sample'
     end
-
-    puts 'Update your database.yml based in database-docker.yml'
   end
 
+  def render_production_templates(ruby_version: '2.5.1-slim', database: 'postgresql', id_rsa: 'no')
+    @ruby_version = ruby_version
+    @database     = database
+    @id_rsa       = id_rsa
+
+    directory 'templates/docker/production', 'templates/docker/production'
+
+    template 'templates/docker/production/rails/Dockerfile.erb', 'docker/production/rails/Dockerfile'
+
+  end
 end
