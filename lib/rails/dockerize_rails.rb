@@ -48,7 +48,7 @@ id_rsa.sample'
     @database     = database
     @id_rsa       = id_rsa
 
-    directory 'templates/docker/production', 'templates/docker/production'
+    directory 'templates/docker/production', 'docker/production'
 
     template 'templates/docker/production/rails/Dockerfile.erb', 'docker/production/rails/Dockerfile'
 
