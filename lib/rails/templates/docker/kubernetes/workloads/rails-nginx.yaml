@@ -15,9 +15,9 @@ spec:
         app: rails-nginx
     spec:
       containers:
-      - image: gcr.io/<PROJECT_ID>/nginx:production
+      - image: gcr.io/<PROJECT_ID>/nginx:latest
         name: nginx
-      - image: gcr.io/<PROJECT_ID>/rails:production
+      - image: gcr.io/<PROJECT_ID>/rails:latest
         name: rails
         envFrom:
         - configMapRef:
