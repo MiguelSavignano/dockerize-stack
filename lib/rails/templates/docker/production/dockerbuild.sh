@@ -26,6 +26,7 @@ docker build \
 docker build \
   -t ${IMAGE_NAME}/nginx:${BRANCH_NAME}-${SHORT_SHA} \
   -t ${IMAGE_NAME}/nginx:${BRANCH_NAME}-latest \
+  -t ${IMAGE_NAME}/nginx:latest \
   -f docker/production/nginx/Dockerfile \
   docker/production/nginx
 
@@ -37,3 +38,4 @@ gcloud docker -- push ${IMAGE_NAME}/rails:${BRANCH_NAME}-latest
 gcloud docker -- push ${IMAGE_NAME}/rails:latest
 gcloud docker -- push ${IMAGE_NAME}/nginx:${BRANCH_NAME}-${SHORT_SHA}
 gcloud docker -- push ${IMAGE_NAME}/nginx:${BRANCH_NAME}-latest
+gcloud docker -- push ${IMAGE_NAME}/nginx:latest
