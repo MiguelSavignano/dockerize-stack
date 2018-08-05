@@ -49,6 +49,7 @@ id_rsa.sample'
     @id_rsa       = id_rsa
 
     directory 'templates/docker/production', 'docker/production'
+    directory 'templates/docker/kubernetes', 'docker/kubernetes'
 
     template 'templates/docker/production/rails/Dockerfile.erb', 'docker/production/rails/Dockerfile'
 
