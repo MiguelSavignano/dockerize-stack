@@ -9,15 +9,13 @@ RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y \
     apt-transport-https \
     git \
     curl
-
 <% if database == "mysql" %>
 # install mysql
-RUN apt-get install -y mysql-client libmysqlclient-dev
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y libmysqlclient-dev mysql-client
 <% elsif database == "postgresql" %>
 # install postgresql
-RUN apt-get install -y libpq-dev postgresql-client
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y libpq-dev postgresql-client
 <% end %>
-
 # install node 8.9.1 LTS
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash - \
     && apt-get update -qq && apt-get dist-upgrade -y && apt-get update && apt-get install -y nodejs
@@ -42,16 +40,8 @@ COPY package.json yarn.lock /app/
 RUN yarn install --pure-lockfile --production
 # ****************************************************
 
-# ********Assets precompile************************
-# Invalidate assets cache if assets files change
-COPY config config
-COPY app/assets app/assets
-COPY app/javascript app/javascript
-
-RUN rails assets:precompile
-# ****************************************************
-
 COPY . /app
+RUN rails assets:precompile
 
 # *******************************************
 # **************** Multi Stage **************
@@ -60,20 +50,21 @@ FROM ruby:2.5.0-slim
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
+
 <% if database == "mysql" %>
 # install mysql
-RUN apt-get install -y mysql-client \
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y mysql-client º
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 <% elsif database == "postgresql" %>
 # install postgresql
-RUN apt-get install -y postgresql-client  \
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y postgresql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 <% end %>
 # install node 8.9.1 LTS
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash - \
-    && apt-get update && apt-get install -y nodejs \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash -
+RUN apt-get update && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
