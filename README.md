@@ -16,14 +16,6 @@ or
 docker pull devmasx/dockerize-stack
 ```
 
-## Stacks available
-
-- [x] Rails 5.1 or 5.2 (Ruby)
-- [ ] Symfony (PHP)
-- [ ] Phoenixframework (Elixir)
-- [ ] Django (Python)
-- [ ] Express (Node)
-
 ## Usage
 ```sh
 dockerize-stack rails
@@ -43,6 +35,13 @@ example files generate:
 --development
 ----Dockerfile
 ----entrypoint.sh
+--production
+----rails
+------Dockerfile
+------entrypoint.sh
+----nginx
+------Dockerfile
+------entrypoint.sh
 /.dockerignore
 /docker-compose.yml
 /config/database-docker.yml
