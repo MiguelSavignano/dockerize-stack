@@ -34,20 +34,21 @@ class DockerizeRails < Thor
       template 'templates/docker-compose.yml.erb', "#{WORKDIR}/docker-compose.yml"
       template 'templates/config/database-docker.yml.erb', "#{WORKDIR}/config/database-docker.yml"
       template 'templates/dockerignore.erb', "#{WORKDIR}/.dockerignore"
-
-      append_to_file "#{WORKDIR}/.gitignore", '
+      append_or_create "#{WORKDIR}/.gitignore", '
 volumes'
       if @id_rsa == 'yes'
         template 'templates/id_rsa.sample', "#{WORKDIR}/id_rsa.sample"
-        append_to_file "#{WORKDIR}/.gitignore", '
-id_rsa'
-        append_to_file "#{WORKDIR}/.gitignore", '
-id_rsa.sample'
+        append_or_create "#{WORKDIR}/.gitignore", '
+id_rsa
+id_rsa.sample
+'
       end
       puts 'Update your database.yml based in database-docker.yml'
     end
 
     def render_production_templates(ruby_version: '2.5.1-slim', database: 'postgresql', id_rsa: 'no')
+      response = ask("You want generate docker-stack for production?")
+      return false unless response
       @ruby_version = ruby_version
       @database     = database
       @id_rsa       = id_rsa
@@ -56,6 +57,16 @@ id_rsa.sample'
       directory 'templates/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
 
       template 'templates/docker/Dockerfile.production.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
+    end
+  end
+
+  private
+
+  def append_or_create(file_path, file_content)
+    if File.exist?(file_path)
+      append_to_file file_path, file_content
+    else
+      create_file file_path, file_content
     end
   end
 end
