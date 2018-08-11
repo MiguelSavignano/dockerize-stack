@@ -1,0 +1,26 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: rails-nginx
+  name: rails-nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rails-nginx
+  template:
+    metadata:
+      labels:
+        app: rails-nginx
+    spec:
+      containers:
+      - image: gcr.io/<PROJECT_ID>/nginx:latest
+        name: nginx
+      - image: gcr.io/<PROJECT_ID>/rails:latest
+        name: rails
+        envFrom:
+        - configMapRef:
+            name: rails-config
+        - secretRef:
+            name: rails-secrets

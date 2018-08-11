@@ -4,6 +4,7 @@ class DockerizeRails < Thor
   include Thor::Actions
   attr_accessor :ruby_version, :database, :id_rsa
 
+  WORKDIR = "./examples/rails".freeze
 
   def self.source_root
     File.dirname(__FILE__)
@@ -17,6 +18,9 @@ class DockerizeRails < Thor
     id_rsa       = ask('Would you need your id_rsa file to connect with GitHub? Type yes or no (default no):')
     id_rsa       = 'no' if id_rsa == ''
     render_templates(ruby_version: ruby_version, database: database, id_rsa: id_rsa)
+    render_production_templates(ruby_version: ruby_version, database: database, id_rsa: id_rsa)
+
+    puts 'Update your database.yml based in database-docker.yml'
   end
 
   no_commands do
@@ -25,22 +29,44 @@ class DockerizeRails < Thor
       @database     = database
       @id_rsa       = id_rsa
 
-      template 'templates/docker/development/Dockerfile.erb', 'docker/development/Dockerfile'
-      template 'templates/docker/development/entrypoint.sh.erb', 'docker/development/entrypoint.sh'
-      template 'templates/docker-compose.yml.erb', 'docker-compose.yml'
-      template 'templates/config/database-docker.yml.erb', 'config/database-docker.yml'
-      template 'templates/dockerignore.erb', '.dockerignore'
-
-      append_to_file '.gitignore', '
+      template 'templates/docker/development/Dockerfile.erb', "#{WORKDIR}/docker/development/Dockerfile"
+      template 'templates/docker/development/entrypoint.sh.erb', "#{WORKDIR}/docker/development/entrypoint.sh"
+      template 'templates/docker-compose.yml.erb', "#{WORKDIR}/docker-compose.yml"
+      template 'templates/config/database-docker.yml.erb', "#{WORKDIR}/config/database-docker.yml"
+      template 'templates/dockerignore.erb', "#{WORKDIR}/.dockerignore"
+      append_or_create "#{WORKDIR}/.gitignore", '
 volumes'
       if @id_rsa == 'yes'
-        template 'templates/id_rsa.sample', 'id_rsa.sample'
-        append_to_file '.gitignore', '
-id_rsa'
-        append_to_file '.gitignore', '
-id_rsa.sample'
+        template 'templates/id_rsa.sample', "#{WORKDIR}/id_rsa.sample"
+        append_or_create "#{WORKDIR}/.gitignore", '
+id_rsa
+id_rsa.sample
+'
       end
       puts 'Update your database.yml based in database-docker.yml'
+    end
+
+    def render_production_templates(ruby_version: '2.5.1-slim', database: 'postgresql', id_rsa: 'no')
+      response = ask("You want generate docker-stack for production?")
+      return false unless response
+      @ruby_version = ruby_version
+      @database     = database
+      @id_rsa       = id_rsa
+
+      directory 'templates/docker/production', "#{WORKDIR}/docker/production"
+      directory 'templates/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
+
+      template 'templates/docker/Dockerfile.production.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
+    end
+  end
+
+  private
+
+  def append_or_create(file_path, file_content)
+    if File.exist?(file_path)
+      append_to_file file_path, file_content
+    else
+      create_file file_path, file_content
     end
   end
 end

@@ -17,23 +17,14 @@ services:
       - db
     # env_file:
     #   - web.env
-<% if database == "mysql" %>
-  db:
-    image: 'mysql:5.7'
-    # ports:
-    #   - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - ./volumes/mysql:/var/lib/mysql
-<% elsif database == "postgresql" %>
+
   db:
     image: postgres:9.6
     # ports:
     #   - "5432:5432"
     volumes:
       - ./volumes/postgresql:/var/lib/postgresql/data
-<% end %>
+
   # redis:
   #   image: redis
   #     ports:
