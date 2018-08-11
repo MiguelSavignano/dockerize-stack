@@ -4,7 +4,7 @@ class DockerizeRails < Thor
   include Thor::Actions
   attr_accessor :ruby_version, :database, :id_rsa
 
-  WORKDIR = "./examples/rails".freeze
+  WORKDIR = ".".freeze
 
   def self.source_root
     File.dirname(__FILE__)
