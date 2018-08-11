@@ -1,0 +1,47 @@
+version: '3'
+services:
+  web:
+    build:
+      dockerfile: ./docker/development/Dockerfile
+      context: ./
+    container_name: web
+    stdin_open: true
+    tty: true
+    command: "bash ./docker/development/entrypoint.sh"
+    volumes:
+      - .:/app
+      - ./volumes/bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    # env_file:
+    #   - web.env
+
+  db:
+    image: postgres:9.6
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - ./volumes/postgresql:/var/lib/postgresql/data
+
+  # redis:
+  #   image: redis
+  #     ports:
+  #       - "6379:6379"
+  # mailcatcher:
+  #   image: schickling/mailcatcher
+  #   ports:
+  #     - 1025:1025
+  #     - 1080:1080
+
+# USAGE
+
+# execute a container for run rails console or rake tasks
+# docker-compose run --rm web bash
+
+# attach the container when use binding.pry
+# docker attach web
+
+# when run rails generator you need to run
+# sudo chown -R $USER:$USER $(ls | grep -v volumes)

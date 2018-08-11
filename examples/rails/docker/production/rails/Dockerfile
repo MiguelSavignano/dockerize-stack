@@ -1,0 +1,81 @@
+FROM ruby:2.5.1-slim as builder
+
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+
+# install common dev libs
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y \
+    build-essential \
+    apt-transport-https \
+    git \
+    curl
+
+# install postgresql
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y libpq-dev postgresql-client
+
+# install node 8.9.1 LTS
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash - \
+    && apt-get update -qq && apt-get dist-upgrade -y && apt-get update && apt-get install -y nodejs
+
+# install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list  \
+    && apt-get update && apt-get dist-upgrade -y && apt-get update && apt-get install yarn
+
+RUN mkdir /app
+WORKDIR /app
+
+# ************Install Ruby gems***************************
+# Invalidate gems cache if change Gemfile or Gemfile.lock
+COPY Gemfile Gemfile.lock /app/
+RUN bundle install -j 4 --without development test staging --deployment
+# ******************************************************
+
+# ********Install Node packages************************
+# Invalidate node_modules cache if yarn.lock change
+COPY package.json yarn.lock /app/
+RUN yarn install --pure-lockfile --production
+# ****************************************************
+
+COPY . /app
+RUN rails assets:precompile
+
+# *******************************************
+# **************** Multi Stage **************
+# *******************************************
+FROM ruby:2.5.0-slim
+
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+
+
+# install postgresql
+RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y postgresql-client \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install node 8.9.1 LTS
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bin/bash -
+RUN apt-get update && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /app
+WORKDIR /app
+
+# ************Copy only Rails app, prevent copy unnecessary files (.dockerignore don't work)***************************
+COPY --from=builder /app/app /app/app
+COPY --from=builder /app/config /app/config
+COPY --from=builder /app/bin /app/bin
+COPY --from=builder /app/db /app/db
+COPY --from=builder /app/lib /app/lib
+COPY --from=builder /app/public /app/public
+COPY --from=builder /app/vendor /app/vendor
+COPY --from=builder /app/config.ru app/Gemfile app/Gemfile.lock app/Rakefile /app/
+# *********************************************************************************************************************
+
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+
+COPY --from=builder /app/docker/production/rails/entrypoint.sh /app/docker/production/rails/entrypoint.sh
+
+CMD ["/app/docker/production/rails/entrypoint.sh"]

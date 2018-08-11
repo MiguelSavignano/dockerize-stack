@@ -1,0 +1,29 @@
+# Update your database.yml based in database-docker.yml
+
+
+# Install the pg driver:
+#   gem install pg
+
+default: &default
+  adapter: postgresql
+  pool: 5
+  encoding: utf8
+  host: db
+  username: postgres
+  password:
+
+
+development:
+  <<: *default
+  database: myapp_development
+
+test:
+  <<: *default
+  database: myapp_test
+
+production:
+  <<: *default
+  host: 
+  database: 
+  username: 
+  password: 
