@@ -18,7 +18,7 @@ docker pull devmasx/dockerize-stack
 
 ## Stacks available
 
-- [x] Rails 5.1 (Ruby)
+- [x] Rails 5.1 or 5.2 (Ruby)
 - [ ] Symfony (PHP)
 - [ ] Phoenixframework (Elixir)
 - [ ] Django (Python)
@@ -49,7 +49,5 @@ example files generate:
 ```
 
 ## TODO
-- [ ] Add phoenix generator
-- [ ] Solve use rails generator in container
 - [ ] Add integrations with all database types rails new supported ([mysql/postgresql/sqlite3/oracle/frontbase/ibm_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc])
-- [x] Integrate Build with private repository in the generator
+- [x] Integrate Build with private repositorys

@@ -1,9 +1,9 @@
 # Rails stack
 
 ## Dockerfiles
-[docker-compose.yml](doc/rails/docker-compose.yml)
-[Dockerfile](doc/rails/Dockerfile)
-
+[docker-compose.yml](examples/rails/docker-compose.yml)
+[Dockerfile](examples/rails/docker/development/Dockerfile)
+[Dockerfile Production](examples/rails/docker/production/Dockerfile)
 
 ## Common problems
 
@@ -25,7 +25,9 @@ docker-compose don't have a interactive terminal and you need to attach the cont
 ```sh
 docker attach web
 ```
-warning | in attach mode if you exit with CTRL+C the container will be stop and you need to use docker-compose up again
+warning | in attach mode if you exit with Ctrl+c the container will be stop and you need to use docker-compose up again
+To detach the tty without exiting the shell,
+use the escape sequence Ctrl-p + Ctrl-q
 
 ### Persist Database data
 
