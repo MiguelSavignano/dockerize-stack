@@ -27,6 +27,13 @@ COPY --from=node /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
 
 WORKDIR /app
 
+<% if @github_private == 'yes' %>
+# Private repository
+ARG GITHUB_TOKEN
+ARG GITHUB_USERNAME
+RUN bundle config github.com ${GITHUB_USERNAME}:${GITHUB_TOKEN}
+<% end %>
+
 # Invalidate gems cache if change Gemfile or Gemfile.lock
 COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4
@@ -37,11 +44,3 @@ RUN yarn install --pure-lockfile
 
 COPY . /app
 
-<% if @id_rsa == 'yes' %>
-RUN mkdir /root/.ssh
-RUN cp id_rsa /root/.ssh/id_rsa
-# RUN chmod 0644 /root/.ssh/id_rsa
-RUN touch /root/.ssh/known_hosts
-RUN eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa && ssh-add -l && ssh-add -L && echo "Host github.com\n\tIdentityFile ~/.ssh/id_rsa" >> /root/.ssh/config
-RUN ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
-<% end %>

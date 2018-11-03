@@ -4,6 +4,11 @@ services:
     build:
       dockerfile: ./docker/development/Dockerfile
       context: ./
+<% if @github_private == 'yes' %>
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+        - GITHUB_USERNAME=${GITHUB_USERNAME}
+<% end %>
     container_name: web
     stdin_open: true
     tty: true
