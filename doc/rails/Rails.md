@@ -54,20 +54,16 @@ Solution: delete tmp/pids/server.pid every time the container start
 
 ### Build with private repository
 
-Some times in you Gemfile you use private repository only if you have a public key you can download the gem
+Some times in you Gemfile you use private repository using git
 
-You need to add your public key in the container
-1. Copy your id_rsa in the root project
+You need to add github user and token for download private gems from github repository.
+Important: gems can only be downloaded over https not ssh
 example:
-```sh
-cp ~/.ssh/id_rsa .
-```
-2. Add the id_rsa in the container before run bundle install
+
 ```Dockerfile
 ...
-RUN mkdir -p /root/.ssh
-ADD id_rsa /root/.ssh/id_rsa
-RUN chmod 700 /root/.ssh/id_rsa
-RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+ARG GITHUB_TOKEN
+ARG GITHUB_USERNAME
+RUN bundle config github.com ${GITHUB_USERNAME}:${GITHUB_TOKEN}
 ....
 ```
