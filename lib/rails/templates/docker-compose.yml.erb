@@ -10,7 +10,7 @@ services:
     command: "bash ./docker/development/entrypoint.sh"
     volumes:
       - .:/app
-      - ./volumes/bundle:/usr/local/bundle
+      - gems:/usr/local/bundle
     ports:
       - "3000:3000"
     depends_on:
@@ -25,14 +25,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
     volumes:
-      - ./volumes/mysql:/var/lib/mysql
+      - database:/var/lib/mysql
 <% elsif database == "postgresql" %>
   db:
     image: postgres:9.6
     # ports:
     #   - "5432:5432"
     volumes:
-      - ./volumes/postgresql:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
 <% end %>
   # redis:
   #   image: redis
@@ -44,13 +44,17 @@ services:
   #     - 1025:1025
   #     - 1080:1080
 
+volumes:
+  gems:
+  database:
+
 # USAGE
 
-# execute a container for run rails console or rake tasks
+# Execute a container for run rails console or rake tasks
 # docker-compose run --rm web bash
 
-# attach the container when use binding.pry
+# Attach the container when use binding.pry
 # docker attach web
 
-# when run rails generator you need to run
-# sudo chown -R $USER:$USER $(ls | grep -v volumes)
+# When run rails generator you need to run
+# sudo chown -R $USER:$USER .
