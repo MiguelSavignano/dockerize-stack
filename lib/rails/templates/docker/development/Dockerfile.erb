@@ -1,4 +1,4 @@
-FROM node:8.11.3-slim as node
+FROM node:10.13.0-slim as node
 
 # ******Multi stage ********
 FROM ruby:<%= ruby_version %>
@@ -18,12 +18,12 @@ RUN apt-get install -y mysql-client libmysqlclient-dev
 RUN apt-get install -y postgresql-client
 <% end %>
 
-# install Nodejs 8.11.3 and Yarn 1.6.0
-ENV NODE_VERSION 8.11.3
-ENV YARN_VERSION 1.6.0
+# Install Nodejs 10.13.0 and Yarn 1.10.1
+ENV NODE_VERSION 10.13.0
+ENV YARN_VERSION 1.10.1
 COPY --from=node /usr/local/bin/ /usr/local/bin/
 COPY --from=node /usr/local/lib/ /usr/local/lib/
-COPY --from=node /opt/yarn-v1.6.0/ /opt/yarn-v1.6.0/
+COPY --from=node /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
 
 WORKDIR /app
 
