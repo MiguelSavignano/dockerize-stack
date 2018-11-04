@@ -14,6 +14,7 @@ describe "DockerizeRails" do
   # end
 
   it "#render_templates" do
+    DockerizeRails::WORKDIR = "./examples/rails"
     generator = DockerizeRails.new
     generator.ruby_version = '2.5.1-slim'
     generator.database = 'postgresql'
