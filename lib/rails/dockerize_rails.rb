@@ -2,7 +2,7 @@ require 'thor'
 # Ask variables and render templates
 class DockerizeRails < Thor
   include Thor::Actions
-  attr_accessor :ruby_version, :database, :github_private
+  attr_accessor :ruby_version, :database, :github_private, :docker_production
 
   WORKDIR = ".".freeze
 
@@ -17,9 +17,12 @@ class DockerizeRails < Thor
     @database       = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
     @github_private = ask('You need github token for private gems? (default no):')
     @github_private = 'no' if @github_private == ''
+    @docker_production = ask("You want generate docker-stack for production?")
 
     render_templates
-    render_production_templates
+    if @docker_production == ''
+      render_production_templates
+    end
 
     puts 'Update your database.yml based in database-docker.yml'
   end
@@ -35,9 +38,6 @@ class DockerizeRails < Thor
     end
 
     def render_production_templates
-      response = ask("You want generate docker-stack for production?")
-      return false unless response
-
       directory 'templates/docker/production', "#{WORKDIR}/docker/production"
       directory 'templates/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
 
