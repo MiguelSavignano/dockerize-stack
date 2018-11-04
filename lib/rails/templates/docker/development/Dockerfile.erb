@@ -6,7 +6,6 @@ FROM ruby:<%= ruby_version %>
 # Install common dev libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential \
-  libpq-dev \
   vim \
   git
 
@@ -15,7 +14,7 @@ RUN apt-get update -qq && apt-get install -y \
 RUN apt-get install -y mysql-client libmysqlclient-dev
 <% elsif database == "postgresql" %>
 # Install Postgresql
-RUN apt-get install -y postgresql-client
+RUN apt-get install -y postgresql-client libpq-dev
 <% end %>
 
 # Install Nodejs 10.13.0 and Yarn 1.10.1
@@ -38,7 +37,7 @@ RUN bundle config github.com ${GITHUB_USERNAME}:${GITHUB_TOKEN}
 COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4
 
-# Invalidate node_modules cache if yarn.lock change
+# Invalidate node_modules cache if package.json or yarn.lock
 COPY package.json yarn.lock /app/
 RUN yarn install --pure-lockfile
 
