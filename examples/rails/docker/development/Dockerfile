@@ -6,13 +6,12 @@ FROM ruby:2.5.1-slim
 # Install common dev libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential \
-  libpq-dev \
   vim \
   git
 
 
 # Install Postgresql
-RUN apt-get install -y postgresql-client
+RUN apt-get install -y postgresql-client libpq-dev
 
 
 # Install Nodejs 10.13.0 and Yarn 1.10.1
@@ -30,7 +29,7 @@ WORKDIR /app
 COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4
 
-# Invalidate node_modules cache if yarn.lock change
+# Invalidate node_modules cache if package.json or yarn.lock
 COPY package.json yarn.lock /app/
 RUN yarn install --pure-lockfile
 

@@ -19,7 +19,7 @@ class DockerizeRails < Thor
     @docker_production = ask_with_default("You want generate docker-stack for production?", 'no')
 
     render_templates
-    render_production_templates if @docker_production == ''
+    render_production_templates if @docker_production != 'no'
   end
 
   no_commands do
@@ -36,7 +36,7 @@ class DockerizeRails < Thor
       directory 'templates/docker/production', "#{WORKDIR}/docker/production"
       directory 'templates/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
 
-      template 'templates/docker/Dockerfile.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
+      template 'templates/docker/production/rails/Dockerfile.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
     end
   end
 

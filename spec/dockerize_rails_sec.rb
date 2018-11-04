@@ -22,6 +22,7 @@ describe "DockerizeRails" do
     generator.docker_production = 'yes'
 
     generator.render_templates
+    generator.render_production_templates
   end
 
   # Test build docker image
