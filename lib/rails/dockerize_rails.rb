@@ -12,17 +12,14 @@ class DockerizeRails < Thor
 
   desc 'generate_files', 'generate docker files for rails application'
   def generate_files
-    @ruby_version   = ask('Ruby Version (default 2.5.1-slim):')
-    @ruby_version   = '2.5.1-slim' if @ruby_version == ''
+    @ruby_version = ask_with_default('Ruby Version (default 2.5.1):', '2.5.1')
+    @ruby_version = "#{@ruby_version}-slim"
     @database       = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
-    @github_private = ask('You need github token for private gems? (default no):')
-    @github_private = 'no' if @github_private == ''
-    @docker_production = ask("You want generate docker-stack for production?")
+    @github_private = ask_with_default('You need github token for private gems? (default no):', 'no')
+    @docker_production = ask_with_default("You want generate docker-stack for production?", 'no')
 
     render_templates
-    if @docker_production == ''
-      render_production_templates
-    end
+    render_production_templates if @docker_production == ''
 
     puts 'Update your database.yml based in database-docker.yml'
   end
@@ -46,6 +43,11 @@ class DockerizeRails < Thor
   end
 
   private
+
+  def ask_with_default(question = '', default = '')
+    result = ask(question)
+    result != '' ? result : default
+  end
 
   def append_or_create(file_path, file_content)
     if File.exist?(file_path)
