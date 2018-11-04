@@ -18,10 +18,12 @@ describe "DockerizeRails" do
     generator = DockerizeRails.new
     generator.ruby_version = '2.5.1-slim'
     generator.database = 'postgresql'
-    generator.github_private = 'yes'
+    generator.github_private = 'no'
     generator.docker_production = 'yes'
 
     generator.render_templates
   end
 
+  # Test build docker image
+  # docker build -t dockerize-stak-rails-example -f docker/development/Dockerfile examples/rails
 end
