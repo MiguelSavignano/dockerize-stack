@@ -5,10 +5,6 @@ services:
       dockerfile: ./docker/development/Dockerfile
       context: ./
 
-      args:
-        - GITHUB_TOKEN=${GITHUB_TOKEN}
-        - GITHUB_USERNAME=${GITHUB_USERNAME}
-
     container_name: web
     stdin_open: true
     tty: true

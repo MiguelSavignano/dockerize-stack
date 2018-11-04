@@ -25,11 +25,6 @@ COPY --from=node /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
 WORKDIR /app
 
 
-# Private repository
-ARG GITHUB_TOKEN
-ARG GITHUB_USERNAME
-RUN bundle config github.com ${GITHUB_USERNAME}:${GITHUB_TOKEN}
-
 
 # Invalidate gems cache if change Gemfile or Gemfile.lock
 COPY Gemfile Gemfile.lock /app/

@@ -20,8 +20,6 @@ class DockerizeRails < Thor
 
     render_templates
     render_production_templates if @docker_production == ''
-
-    puts 'Update your database.yml based in database-docker.yml'
   end
 
   no_commands do
@@ -38,7 +36,7 @@ class DockerizeRails < Thor
       directory 'templates/docker/production', "#{WORKDIR}/docker/production"
       directory 'templates/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
 
-      template 'templates/docker/Dockerfile.production.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
+      template 'templates/docker/Dockerfile.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
     end
   end
 
