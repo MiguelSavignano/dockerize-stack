@@ -1,5 +1,4 @@
 bundle check || bundle install
-yarn install --pure-lockfile
 
 rake db:create db:migrate
 rm -f tmp/pids/server.pid
