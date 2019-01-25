@@ -1,80 +1,62 @@
-FROM node:10.13.0-slim as node
+FROM node:10.13.0-slim as nodejs
 
 # ******Multi stage ********
-FROM ruby:2.5.1-slim as builder
+FROM ruby:2.5.1-slim-slim as builder
 
-ENV RAILS_ENV=production
-ENV NODE_ENV=production
+ENV RAILS_ENV=production NODE_ENV=production
 
 # install common dev libs
-RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y \
-    build-essential \
-    apt-transport-https \
-    git \
-    curl
+RUN apt-get update -qq && apt-get install -y \
+    build-essential git
 
 # install postgresql
-RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y libpq-dev postgresql-client
+RUN apt-get update -qq && apt-get install -y libpq-dev postgresql-client
 
+# install Nodejs 10.13.0 and Yarn 1.10.1
+ENV NODE_VERSION=10.13.0 YARN_VERSION=1.10.1
+COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
+COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
+COPY --from=nodejs /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
 
-# Install Nodejs 10.13.0 and Yarn 1.10.1
-ENV NODE_VERSION 10.13.0
-ENV YARN_VERSION 1.10.1
-COPY --from=node /usr/local/bin/ /usr/local/bin/
-COPY --from=node /usr/local/lib/ /usr/local/lib/
-COPY --from=node /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
-
-RUN mkdir /app
 WORKDIR /app
 
-# ************Install Ruby gems***************************
-# Invalidate gems cache if change Gemfile or Gemfile.lock
+# gems cache layer
 COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4 --without development test staging --deployment
-# ******************************************************
 
-# ********Install Node packages************************
-# Invalidate node_modules cache if yarn.lock change
+# node_modules cache layer
 COPY package.json yarn.lock /app/
-RUN yarn install --pure-lockfile --production
-# ****************************************************
+RUN yarn install --pure-lockfile
 
-COPY . /app
+COPY . .
+
 RUN rails assets:precompile
 
+# remove unnecessary files
+RUN rm -r node_modules
+
 # *******************************************
-# **************** Multi Stage **************
+# ************* Multi Stage *****************
 # *******************************************
 FROM ruby:2.5.1-slim
 
-ENV RAILS_ENV=production
-ENV NODE_ENV=production
+ENV RAILS_ENV=production NODE_ENV=production
 
 
 # install postgresql
-RUN apt-get update -qq && apt-get dist-upgrade -y && apt-get install -y postgresql-client \
+RUN apt-get update -qq && apt-get install -y postgresql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# install node 8.9.1 LTS
-ENV NODE_VERSION 8.11.3
-COPY --from=node /usr/local/bin/ /usr/local/bin/
-COPY --from=node /usr/local/lib/ /usr/local/lib/
+# install Nodejs 10.13.0 and Yarn 1.10.1
+ENV NODE_VERSION=10.13.0 YARN_VERSION=1.10.1
+COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
+COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
+COPY --from=nodejs /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
 
 WORKDIR /app
 
-# ************Copy only Rails app, prevent copy unnecessary files (.dockerignore don't work)***************************
-COPY --from=builder /app/app /app/app
-COPY --from=builder /app/config /app/config
-COPY --from=builder /app/bin /app/bin
-COPY --from=builder /app/db /app/db
-COPY --from=builder /app/lib /app/lib
-COPY --from=builder /app/public /app/public
-COPY --from=builder /app/vendor /app/vendor
-COPY --from=builder /app/Gemfile /app/Gemfile.lock app/Rakefile /app/config.ru /app/
-# *********************************************************************************************************************
-
 COPY --from=builder /usr/local/bundle /usr/local/bundle
-COPY --from=builder /app/docker/production/rails/entrypoint.sh /app/docker/production/rails/entrypoint.sh
+COPY --from=builder /app/ /app/
 
-CMD ["/app/docker/production/rails/entrypoint.sh"]
+CMD [ "sh", "-c", "bundle exec rake db:create db:migrate && bundle exec rails server -b 0.0.0.0" ]

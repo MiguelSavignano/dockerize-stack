@@ -1,11 +1,12 @@
-# Ignore all logfiles and tempfiles.
+# Ignore all files from .gitignore
+# cat .gitignore > .dockerignore && cat .gitignore >> .dockerignore
+
 /log/*
 /tmp/*
 
 .byebug_history
 
 volumes
-.git
 
 public/packs
 public/packs-test
@@ -15,3 +16,4 @@ node_modules
 coverage
 yarn-error.log
 .DS_Store
+.git
