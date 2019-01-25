@@ -55,6 +55,6 @@ jobs:
       - run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: |
-          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:${CIRCLE_TAG} .
-      # deploy the image
-      # - run: docker push company/app:$CIRCLE_BRANCH
+          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:$( echo CIRCLE_TAG | sed -e 's/v//' ) .
+      deploy the image
+      - run: docker push company/app:$CIRCLE_BRANCH
