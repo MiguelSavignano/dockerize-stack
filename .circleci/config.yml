@@ -3,8 +3,22 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - test:
+      - deploy:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/ruby:2.4.1
@@ -50,3 +64,13 @@ jobs:
       # - store_artifacts:
       #     path: /tmp/test-results
       #     destination: test-results
+  docker:
+    machine: true
+    steps:
+      - checkout
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: |
+          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:v0.3.0 .
+      # deploy the image
+      # - run: docker push company/app:$CIRCLE_BRANCH
