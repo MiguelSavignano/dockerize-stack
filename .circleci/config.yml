@@ -55,6 +55,6 @@ jobs:
       - run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: |
-          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:$( echo CIRCLE_TAG | sed -e 's/v//' ) .
+          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:$( echo $CIRCLE_TAG | sed -e 's/v//' ) .
       - run: docker push devmasx/dockerize-stack
-      - run: docker push devmasx/dockerize-stack:$( echo CIRCLE_TAG | sed -e 's/v//' )
+      - run: docker push devmasx/dockerize-stack:$( echo $CIRCLE_TAG | sed -e 's/v//' )
