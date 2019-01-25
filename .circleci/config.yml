@@ -1,10 +1,22 @@
-# Ruby CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-ruby/ for more details
-#
-version: 2
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - test:
+          filters: # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/ruby:2.4.1
@@ -36,17 +48,13 @@ jobs:
           name: run tests
           command: |
             rspec
-          # command: |
-          #   mkdir /tmp/test-results
-          #   TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-          #   bundle exec rspec --format progress \
-          #                   --format RspecJunitFormatter \
-          #                   --out /tmp/test-results/rspec.xml \
-          #                   --format progress \
-          #                   $TEST_FILES
-      # collect reports
-      # - store_test_results:
-      #     path: /tmp/test-results
-      # - store_artifacts:
-      #     path: /tmp/test-results
-      #     destination: test-results
+  deploy:
+    machine: true
+    steps:
+      - checkout
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: |
+          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:$( echo $CIRCLE_TAG | sed -e 's/v//' ) .
+      - run: docker push devmasx/dockerize-stack
+      - run: docker push devmasx/dockerize-stack:$( echo $CIRCLE_TAG | sed -e 's/v//' )
