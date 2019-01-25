@@ -1,13 +1,15 @@
+version: 2
 workflows:
-  version: 2
   build-test-deploy:
     jobs:
       - test
       - docker:
           requires:
             - test
+          filters:
+            tags:
+              only: /^v.*/
 
-version: 2
 jobs:
   test:
     docker:
@@ -48,7 +50,6 @@ jobs:
       - run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: |
-          # docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:$CIRCLE_TAG .
-          echo $CIRCLE_TAG .
+          docker build --no-cache -t devmasx/dockerize-stack -t devmasx/dockerize-stack:${CIRCLE_TAG} .
       # deploy the image
       # - run: docker push company/app:$CIRCLE_BRANCH
