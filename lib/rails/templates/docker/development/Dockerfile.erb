@@ -1,20 +1,18 @@
 FROM node:10.13.0-slim as nodejs
 
 # ******Multi stage ********
-FROM ruby:<%= ruby_version %>
+FROM ruby:<%= ruby_version %>-slim
 
 # install common dev libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential vim git
-
 <% if database == "mysql" %>
 # install Mysql
 RUN apt-get install -y mysql-client libmysqlclient-dev
 <% elsif database == "postgresql" %>
-# Install Postgresql
+# install Postgresql
 RUN apt-get install -y postgresql-client libpq-dev
 <% end %>
-
 # install Nodejs 10.13.0 and Yarn 1.10.1
 ENV NODE_VERSION=10.13.0 YARN_VERSION=1.10.1
 COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
@@ -22,14 +20,12 @@ COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
 COPY --from=nodejs /opt/yarn-v1.10.1/ /opt/yarn-v1.10.1/
 
 WORKDIR /app
-
 <% if @github_private == 'yes' %>
 # Private repository
 ARG GITHUB_TOKEN
 ARG GITHUB_USERNAME
 RUN bundle config github.com ${GITHUB_USERNAME}:${GITHUB_TOKEN}
 <% end %>
-
 # gems cache layer
 COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4

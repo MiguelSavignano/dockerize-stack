@@ -13,13 +13,12 @@ class DockerizeRails < Thor
   desc 'generate_files', 'generate docker files for rails application'
   def generate_files
     @ruby_version = ask_with_default('Ruby Version (default 2.5.1):', '2.5.1')
-    @ruby_version = "#{@ruby_version}-slim"
     @database       = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
     @github_private = ask_with_default('You need github token for private gems? (default no):', 'no')
-    @docker_production = ask_with_default("You want generate docker-stack for production?", 'no')
+    @docker_production = ask_with_default("You want generate docker-stack for production? y/n", 'n')
 
     render_templates
-    render_production_templates if @docker_production != 'no'
+    render_production_templates if @docker_production != 'n' || @docker_production != 'no'
   end
 
   no_commands do
