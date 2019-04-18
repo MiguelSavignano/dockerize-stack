@@ -1,0 +1,21 @@
+# BUILD STAGE
+FROM node:<%= @nodejs_version %>-alpine as build
+
+RUN apk -u add git openssh
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# FINAL STAGE
+FROM nginx:1.15
+COPY --from=build /app/www/ /usr/share/nginx/html/
+COPY nginx/conf.d/default.conf.template /etc/nginx/conf.d/default.conf.template
+
+ENV PORT=8080
+# Run the app.  CMD is required to run on Heroku
+# $PORT is set by Heroku
+CMD /bin/bash -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
