@@ -20,6 +20,7 @@ class DockerizeReact < Thor
   no_commands do
     def render_templates
       template 'templates/docker/Dockerfile.erb', "#{WORKDIR}/docker/Dockerfile"
+      template 'templates/docker/.dockerignore', "#{WORKDIR}/.dockerignore"
       directory 'templates/docker/nginx', "#{WORKDIR}/docker/nginx"
     end
   end
