@@ -7,7 +7,7 @@ class DockerizeRails < Thor
   WORKDIR = ".".freeze
 
   def self.source_root
-    File.dirname(__FILE__)
+    "#{File.dirname(__FILE__)}/../../../templates/"
   end
 
   desc 'generate_files', 'generate docker files for rails application'

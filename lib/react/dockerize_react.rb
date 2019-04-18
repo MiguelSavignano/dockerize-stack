@@ -7,7 +7,7 @@ class DockerizeReact < Thor
   WORKDIR = ".".freeze
 
   def self.source_root
-    File.dirname(__FILE__)
+    "#{File.dirname(__FILE__)}/../../templates"
   end
 
   desc 'generate_files', 'generate docker files for react create app'
@@ -19,9 +19,9 @@ class DockerizeReact < Thor
 
   no_commands do
     def render_templates
-      template 'templates/docker/Dockerfile.erb', "#{WORKDIR}/docker/Dockerfile"
-      template 'templates/dockerignore.erb', "#{WORKDIR}/.dockerignore"
-      directory 'templates/docker/nginx', "#{WORKDIR}/docker/nginx"
+      template 'react/docker/Dockerfile.erb', "#{WORKDIR}/docker/Dockerfile"
+      template 'react/dockerignore.erb', "#{WORKDIR}/.dockerignore"
+      directory 'react/docker/nginx', "#{WORKDIR}/docker/nginx"
     end
   end
 
