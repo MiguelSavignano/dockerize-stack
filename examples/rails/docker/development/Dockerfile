@@ -1,7 +1,7 @@
 FROM node:10.13.0-slim as nodejs
 
 # ******Multi stage ********
-FROM ruby:2.5.1-slim-slim
+FROM ruby:2.5.1-slim
 
 # install common dev libs
 RUN apt-get update -qq && apt-get install -y \

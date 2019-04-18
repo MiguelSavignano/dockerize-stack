@@ -1,7 +1,7 @@
 FROM node:10.13.0-slim as nodejs
 
 # ******Multi stage ********
-FROM ruby:2.5.1-slim-slim as builder
+FROM ruby:2.5.1-slim as builder
 
 ENV RAILS_ENV=production NODE_ENV=production
 
@@ -38,7 +38,7 @@ RUN rm -r node_modules
 # *******************************************
 # ************* Multi Stage *****************
 # *******************************************
-FROM ruby:2.5.1-slim
+FROM ruby:2.5.1
 
 ENV RAILS_ENV=production NODE_ENV=production
 
