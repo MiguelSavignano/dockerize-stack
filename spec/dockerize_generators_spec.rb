@@ -1,4 +1,5 @@
 require 'rails/dockerize_rails'
+require 'react/dockerize_react'
 require 'pry'
 
 describe "DockerizeRails" do
@@ -7,11 +8,6 @@ describe "DockerizeRails" do
     generator = DockerizeRails.new
     expect(generator).to be_a(DockerizeRails)
   end
-
-  # it "#generate_files" do
-  #   generator = DockerizeRails.new
-  #   generator.generate_files
-  # end
 
   it "#render_templates" do
     DockerizeRails::WORKDIR = "./examples/rails"
@@ -27,4 +23,18 @@ describe "DockerizeRails" do
 
   # Test build docker image
   # docker build -t dockerize-stak-rails-example -f docker/development/Dockerfile examples/rails
+end
+
+describe "DockerizeReact" do
+    it "#initialize" do
+    generator = DockerizeReact.new
+    expect(generator).to be_a(DockerizeReact)
+  end
+
+  it "#render_templates" do
+    DockerizeReact::WORKDIR = "./examples/react-create-app"
+    generator = DockerizeReact.new
+    generator.nodejs_version = '10'
+    generator.render_templates
+  end
 end

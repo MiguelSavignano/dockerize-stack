@@ -7,7 +7,7 @@ class DockerizeRails < Thor
   WORKDIR = ".".freeze
 
   def self.source_root
-    "#{File.dirname(__FILE__)}/../../../templates/"
+    "#{File.dirname(__FILE__)}/../../templates"
   end
 
   desc 'generate_files', 'generate docker files for rails application'
@@ -23,19 +23,19 @@ class DockerizeRails < Thor
 
   no_commands do
     def render_templates
-      template 'templates/docker/development/Dockerfile.erb', "#{WORKDIR}/docker/development/Dockerfile"
-      template 'templates/docker/development/entrypoint.sh.erb', "#{WORKDIR}/docker/development/entrypoint.sh"
-      template 'templates/docker-compose.yml.erb', "#{WORKDIR}/docker-compose.yml"
-      template 'templates/config/database-docker.yml.erb', "#{WORKDIR}/config/database-docker.yml"
-      template 'templates/dockerignore.erb', "#{WORKDIR}/.dockerignore"
+      template 'rails/docker/development/Dockerfile.erb', "#{WORKDIR}/docker/development/Dockerfile"
+      template 'rails/docker/development/entrypoint.sh.erb', "#{WORKDIR}/docker/development/entrypoint.sh"
+      template 'rails/docker-compose.yml.erb', "#{WORKDIR}/docker-compose.yml"
+      template 'rails/config/database-docker.yml.erb', "#{WORKDIR}/config/database-docker.yml"
+      template 'rails/dockerignore.erb', "#{WORKDIR}/.dockerignore"
       puts 'Update your database.yml based in database-docker.yml'
     end
 
     def render_production_templates
-      directory 'templates/docker/production', "#{WORKDIR}/docker/production"
-      directory 'templates/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
+      directory 'rails/docker/production', "#{WORKDIR}/docker/production"
+      directory 'rails/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
 
-      template 'templates/docker/production/rails/Dockerfile.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
+      template 'rails/docker/production/rails/Dockerfile.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
     end
   end
 
