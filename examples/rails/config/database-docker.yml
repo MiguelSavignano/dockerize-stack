@@ -7,12 +7,10 @@
 default: &default
   adapter: mysql2
   encoding: utf8
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  host: <%= ENV.fetch("DATABASE_HOST") { "127.0.0.1" } %>
-  username: <%= ENV.fetch("DATABASE_USERNAME") { "root" } %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") { "password" } %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: 5
+  host: db
+  username: root
+  password: password
 
 
 development:
@@ -25,4 +23,7 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV.fetch("DATABASE_PASSWORD") { "myapp_production" } %>
+  host: 
+  database: 
+  username: 
+  password: 
