@@ -1,4 +1,3 @@
 #!/usr/bin/env ruby
-require 'dockerize_stack'
-
-DockerizeStack::Command.start
+require_relative '../lib/dockerize_stack'
+DockerizeStack::Command.start(ARGV)

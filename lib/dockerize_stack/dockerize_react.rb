@@ -9,14 +9,13 @@ module DockerizeStack
       "#{File.dirname(__FILE__)}/../../templates"
     end
 
-    desc 'generate_files', 'generate docker files for react create app'
-    def generate_files
-      @nodejs_version = ask_with_default('Nodejs Version (default 10):', '10')
-
-      render_templates
-    end
-
     no_commands do
+      def generate_files(path: '.')
+        @nodejs_version = ask_with_default('Nodejs Version (default 10):', '10')
+
+        render_templates
+      end
+
       def render_templates
         template 'react/docker/Dockerfile.erb', "#{WORKDIR}/docker/Dockerfile"
         template 'react/dockerignore.erb', "#{WORKDIR}/.dockerignore"
