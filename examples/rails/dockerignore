@@ -1,5 +1,5 @@
 # Ignore all files from .gitignore
-# cat .gitignore > .dockerignore && cat .gitignore >> .dockerignore
+# echo .git > .dockerignore && cat .gitignore >> .dockerignore
 
 /log/*
 /tmp/*

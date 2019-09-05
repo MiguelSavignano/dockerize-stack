@@ -2,44 +2,51 @@ require 'thor'
 # Ask variables and render templates
 class DockerizeRails < Thor
   include Thor::Actions
-  attr_accessor :ruby_version, :database, :github_private, :docker_production
+  attr_accessor :ruby_version, :nodejs_version, :yarn_version, :database, :github_private, :kubernetes
 
-  WORKDIR = ".".freeze
+  WORKDIR = '.'.freeze
 
   def self.source_root
-    "#{File.dirname(__FILE__)}/../../templates"
+    "#{File.dirname(__FILE__)}/../../templates/rails"
   end
 
   desc 'generate_files', 'generate docker files for rails application'
   def generate_files
-    @ruby_version = ask_with_default('Ruby Version (default 2.5.1):', '2.5.1')
-    @database       = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
+    @nodejs_version = '10.16.3'
+    @yarn_version = '1.17.3'
+
+    @ruby_version = ask_with_default('Ruby Version (default 2.5.6):', '2.5.6')
+    @database = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
+    @rails_worker = ask_with_default('You need worker service (sidekiq example) (default yes):', 'yes')
     @github_private = ask_with_default('You need github token for private gems? (default no):', 'no')
-    @docker_production = ask_with_default("You want generate docker-stack for production? y/n", 'n')
+    @kubernetes = ask_with_default('You want generate docker-stack for kubernetes? y/n', 'n')
 
     render_templates
-    render_production_templates if @docker_production != 'n' || @docker_production != 'no'
+    puts "lubernetes #{@kubernetes}"
+    render_kubernetes_templates unless ['n', 'no', ''].include?(@kubernetes)
   end
 
   no_commands do
     def render_templates
-      template 'rails/docker/development/Dockerfile.erb', "#{WORKDIR}/docker/development/Dockerfile"
-      template 'rails/docker/development/entrypoint.sh.erb', "#{WORKDIR}/docker/development/entrypoint.sh"
-      template 'rails/docker-compose.yml.erb', "#{WORKDIR}/docker-compose.yml"
-      template 'rails/config/database-docker.yml.erb', "#{WORKDIR}/config/database-docker.yml"
-      template 'rails/dockerignore.erb', "#{WORKDIR}/.dockerignore"
+      render_template 'Dockerfile.erb'
+      render_template 'entrypoint.sh.erb'
+      render_template 'docker-compose.yml.erb'
+      render_template 'config/database-docker.yml.erb'
+      render_template 'dockerignore.erb'
+
       puts 'Update your database.yml based in database-docker.yml'
     end
 
-    def render_production_templates
-      directory 'rails/docker/production', "#{WORKDIR}/docker/production"
-      directory 'rails/docker/kubernetes', "#{WORKDIR}/docker/kubernetes"
-
-      template 'rails/docker/production/rails/Dockerfile.erb', "#{WORKDIR}/docker/production/rails/Dockerfile"
+    def render_kubernetes_templates
+      directory 'kubernetes', "#{WORKDIR}/kubernetes"
     end
   end
 
   private
+
+  def render_template(path)
+    template path, "#{WORKDIR}/#{path.gsub('.erb', '')}"
+  end
 
   def ask_with_default(question = '', default = '')
     result = ask(question)
