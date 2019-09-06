@@ -7,8 +7,8 @@ FROM ruby:2.5.1-slim
 RUN apt-get update -qq && apt-get install -y \
   build-essential vim git
 
-# install Postgresql
-RUN apt-get install -y postgresql-client libpq-dev
+# install Mysql
+RUN apt-get install -y mysql-client libmysqlclient-dev
 
 # install Nodejs 10.13.0 and Yarn 1.10.1
 ENV NODE_VERSION=10.13.0 YARN_VERSION=1.10.1

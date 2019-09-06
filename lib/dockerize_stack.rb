@@ -1,19 +1,22 @@
 require 'thor'
-require 'rails/dockerize_rails'
-require 'react/dockerize_react'
+require_relative './thor_extend.rb'
+require_relative './dockerize_stack/react.rb'
+require_relative './dockerize_stack/rails.rb'
 
 module DockerizeStack
   class Command < Thor
     include Thor::Actions
 
+    option :path
     desc 'rails', 'generate docker files for rails application'
     def rails
-      DockerizeRails.new.generate_files
+      DockerizeStack::Rails.new.generate_files(path: options[:path])
     end
 
+    option :path
     desc 'react', 'generate docker files for create react app'
     def react
-      DockerizeReact.new.generate_files
+      DockerizeStack::React.new.generate_files(path: options[:path])
     end
   end
 end

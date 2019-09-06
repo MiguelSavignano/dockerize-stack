@@ -1,52 +1,100 @@
-version: '3'
+version: "3.4"
 services:
   web:
     build:
-      dockerfile: ./docker/development/Dockerfile
+      args:
+        BUNDLE_DEPLOYMENT: "false"
+        BUNDLE_WITHOUT: ""
+        NODE_ENV: development
+      target: builder
       context: ./
-
+      dockerfile: ./Dockerfile
+    image: dockerize-rails
     container_name: web
     stdin_open: true
     tty: true
-    command: "bash ./docker/development/entrypoint.sh"
     volumes:
-      - .:/app
-      - gems:/usr/local/bundle
+      - .:/app:delegated
+      - bundle:/usr/local/bundle:delegated
+      - node_modules:/app/node_modules:delegated
     ports:
       - "3000:3000"
     depends_on:
       - db
-    # env_file:
-    #   - web.env
+    environment:
+      DATABASE_HOST: db
+      # sidekiq redis
+      # https://github.com/mperham/sidekiq/wiki/Using-Redis
+      REDIS_PROVIDER: REDISGREEN_URL
+      REDISGREEN_URL: redis://redis:6379/0
+
+  worker:
+    image: dockerize-rails
+    container_name: worker
+    stdin_open: true
+    tty: true
+    command: bundle exec sidekiq -q default -q mailers
+    volumes:
+      - .:/app:delegated
+      - bundle:/usr/local/bundle:delegated
+      - node_modules:/app/node_modules:delegated
+    depends_on:
+      - db
+    environment:
+      RAILS_MASTER_KEY: ea3aaacc43f832b6e9049e61211561dc
+      # sidekiq redis
+      # https://github.com/mperham/sidekiq/wiki/Using-Redis
+      REDIS_PROVIDER: REDISGREEN_URL
+      REDISGREEN_URL: redis://redis:6379/0
 
   db:
-    image: postgres:9.6
+    image: postgres:9.5.9
     # ports:
     #   - "5432:5432"
     volumes:
-      - database:/var/lib/postgresql/data
+      - postgresql:/var/lib/postgresql/data:delegated
 
-  # redis:
-  #   image: redis
-  #     ports:
-  #       - "6379:6379"
-  # mailcatcher:
-  #   image: schickling/mailcatcher
-  #   ports:
-  #     - 1025:1025
-  #     - 1080:1080
+  redis:
+    image: redis
+    # ports:
+    #   - "6379:6379"
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - 1025:1025
+      - 1080:1080
 
 volumes:
-  gems:
-  database:
-
+  postgresql:
+  bundle:
+  node_modules:
 # USAGE
 
-# Execute a container for run rails console or rake tasks
+# ************************************
+# **Start only external services (web service use local environment)**
+# ************************************
+
+# docker-compose up db redis mailcatcher
+# bundle exec rails server
+# bundle exec bundle exec sidekiq -q default -q mailers
+# bin/webpack-dev-server
+
+# ************************************
+# **Development on ruby docker image**
+# ************************************
+
+# docker-compose buid web
+# docker-compose up
+
+# Run rails console
+# docker-compose run --rm web rails console
+
+# Enter in the container for run rails console or rake tasks
 # docker-compose run --rm web bash
 
-# Attach the container when use binding.pry
+# Attach the container when use byebug or binding.pry
 # docker attach web
 
-# When run rails generator you need to run
+# When run rails generator then you must run
 # sudo chown -R $USER:$USER .

@@ -9,8 +9,8 @@ ENV RAILS_ENV=production NODE_ENV=production
 RUN apt-get update -qq && apt-get install -y \
     build-essential git
 
-# install postgresql
-RUN apt-get update -qq && apt-get install -y libpq-dev postgresql-client
+# install mysql
+RUN apt-get update -qq && apt-get install -y libmysqlclient-dev mysql-client
 
 # install Nodejs 10.13.0 and Yarn 1.10.1
 ENV NODE_VERSION=10.13.0 YARN_VERSION=1.10.1
@@ -43,8 +43,8 @@ FROM ruby:2.5.1
 ENV RAILS_ENV=production NODE_ENV=production
 
 
-# install postgresql
-RUN apt-get update -qq && apt-get install -y postgresql-client \
+# install mysql
+RUN apt-get update -qq && apt-get install -y mysql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
