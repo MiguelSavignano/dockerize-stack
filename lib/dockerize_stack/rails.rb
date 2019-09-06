@@ -1,8 +1,8 @@
 module DockerizeStack
   # Ask variables and render templates
-  class DockerizeRails < ThorExtend
+  class Rails < ThorExtend
     attr_accessor :ruby_version, :nodejs_version, :yarn_version,
-      :database, :github_private, :kubernetes
+      :database, :github_private, :kubernetes, :workdir
 
     def self.source_root
       "#{File.dirname(__FILE__)}/../../templates/rails"
@@ -35,7 +35,7 @@ module DockerizeStack
       end
 
       def render_kubernetes_templates
-        directory 'kubernetes', "#{WORKDIR}/kubernetes"
+        directory 'kubernetes', "#{@workdir}/kubernetes"
       end
     end
   end

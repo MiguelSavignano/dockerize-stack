@@ -2,7 +2,7 @@
 # ******Build base stage******
 # ****************************
 
-FROM node:10.16.3-slim as nodejs
+FROM node:-slim as nodejs
 
 FROM ruby:2.5.6-slim
 
@@ -10,14 +10,14 @@ FROM ruby:2.5.6-slim
 RUN apt-get update -qq && apt-get install -y \
   build-essential vim git
 
-# Install Mysql
-RUN apt-get install -y mysql-client libmysqlclient-dev
+# Install Postgresql
+RUN apt-get install -y postgresql-client libpq-dev
 
 # Install Nodejs and Yarn
-ENV NODE_VERSION=10.16.3 YARN_VERSION=1.17.3
+ENV NODE_VERSION= YARN_VERSION=
 COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
 COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
-COPY --from=nodejs /opt/yarn-v1.17.3/ /opt/yarn-v1.17.3/
+COPY --from=nodejs /opt/yarn-v/ /opt/yarn-v/
 
 WORKDIR /app
 
