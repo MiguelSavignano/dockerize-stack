@@ -2,7 +2,10 @@ require 'thor'
 # Ask variables and render templates
 module DockerizeStack
   # Ask variables and render templates
-  class React < ThorExtend
+  class React < Thor
+    include Thor::Actions
+    include ThorActionsExtend
+
     attr_accessor :nodejs_version, :workdir
 
     def self.source_root

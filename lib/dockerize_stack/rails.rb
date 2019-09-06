@@ -1,6 +1,9 @@
 module DockerizeStack
   # Ask variables and render templates
-  class Rails < ThorExtend
+  class Rails < Thor
+    include Thor::Actions
+    include ThorActionsExtend
+
     attr_accessor :ruby_version, :nodejs_version, :yarn_version,
       :database, :github_private, :kubernetes, :workdir
 
