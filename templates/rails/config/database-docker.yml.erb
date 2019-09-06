@@ -39,4 +39,4 @@ test:
 
 production:
   <<: *default
-  database: <%%= ENV.fetch("DATABASE_PASSWORD") { "myapp_production" } %>
+  database: <%%= ENV.fetch("DATABASE_NAME") { "myapp_production" } %>
