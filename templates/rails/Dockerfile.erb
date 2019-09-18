@@ -4,9 +4,9 @@
 
 FROM node:<%= nodejs_version %>-slim as nodejs
 
-FROM ruby:<%= ruby_version %>-slim
+FROM ruby:<%= ruby_version %>-slim as builder
 
-# Install common dev libs
+# Install common libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential vim git
 <% if database == "mysql" %>

@@ -12,8 +12,8 @@ module DockerizeStack
     end
 
     no_commands do
-      def generate_files(path: '.')
-        @workdir = path
+      def generate_files(path:)
+        @workdir = path || '.'
         @nodejs_version = '10.16.3'
         @yarn_version = '1.17.3'
 
