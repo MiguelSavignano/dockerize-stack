@@ -32,7 +32,7 @@ module DockerizeStack
         render_template 'entrypoint.sh.erb'
         render_template 'docker-compose.yml.erb'
         render_template 'config/database-docker.yml.erb'
-        render_template '.dockerignore.erb'
+        render_template 'dockerignore.erb', '.dockerignore'
 
         puts 'Update your database.yml based in database-docker.yml'
       end

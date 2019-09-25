@@ -2,8 +2,8 @@ module ThorActionsExtend
   include Thor::Actions
 
   private
-  def render_template(path)
-    template path, "#{@workdir}/#{path.gsub('.erb', '')}"
+  def render_template(path, target_path = path)
+    template path, "#{@workdir}/#{target_path.gsub('.erb', '')}"
   end
 
   def ask_with_default(question = '', default = '')
