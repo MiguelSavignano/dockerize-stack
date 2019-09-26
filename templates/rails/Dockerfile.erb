@@ -1,9 +1,9 @@
 # ****************************
 # ******Build base stage******
 # ****************************
-
+<% if javascrit_package_manager != "asset_pipeline" %>
 FROM node:<%= nodejs_version %>-slim as nodejs
-
+<% end %>
 FROM ruby:<%= ruby_version %>-slim as builder
 
 # Install common libs
@@ -16,12 +16,18 @@ RUN apt-get install -y mysql-client libmysqlclient-dev
 # Install Postgresql
 RUN apt-get install -y postgresql-client libpq-dev
 <% end %>
-# Install Nodejs and Yarn
+# Install Nodejs<% if javascrit_package_manager == "asset_pipeline" %>
+RUN apt-get install -y nodejs npm
+<% elsif javascrit_package_manager == "yarn" %>
 ENV NODE_VERSION=<%= nodejs_version %> YARN_VERSION=<%= yarn_version %>
 COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
 COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
 COPY --from=nodejs /opt/yarn-v<%= yarn_version %>/ /opt/yarn-v<%= yarn_version %>/
-
+<% elsif javascrit_package_manager == "npm" %>
+ENV NODE_VERSION=<%= nodejs_version %>
+COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
+COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
+<% end %>
 WORKDIR /app
 <% if @github_private == 'yes' %>
 # Private repository
@@ -29,7 +35,6 @@ ARG GITHUB_TOKEN
 ARG GITHUB_USERNAME
 RUN bundle config github.com ${GITHUB_USERNAME}:${GITHUB_TOKEN}
 <% end %>
-
 # Production config
 ARG BUNDLE_DEPLOYMENT=true
 ARG BUNDLE_WITHOUT="development test staging"
@@ -41,11 +46,15 @@ ENV NODE_ENV=$NODE_ENV
 # Gems cache layer
 COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4
-
+<% if javascrit_package_manager == "yarn" %>
 # Node modules cache layer
 COPY package.json yarn.lock /app/
 RUN yarn install --pure-lockfile
-
+<% elsif javascrit_package_manager == "npm" %>
+# Node modules cache layer
+COPY package.json package-lock.json /app/
+RUN npm ci
+<% end %>
 COPY . .
 CMD "./entrypoint.sh"
 
@@ -57,8 +66,9 @@ FROM builder as production-builder
 
 # Build production assets
 RUN bundle exec rails assets:precompile
+<% if javascrit_package_manager != "asset_pipeline" %>
 RUN rm -r node_modules
-
+<% end %>
 # **********************************
 # ******Final production Stage******
 # **********************************
@@ -68,11 +78,18 @@ FROM ruby:<%= ruby_version %>-slim
 ENV NODE_ENV=production RAILS_ENV=production RAILS_LOG_TO_STDOUT=true
 
 # Install system dependencies
+<% if javascrit_package_manager != "asset_pipeline" %>
 COPY --from=nodejs /usr/local/ /usr/local/
+<% end %><% if javascrit_package_manager == "asset_pipeline" %>
+RUN apt-get update -qq && apt-get install -y \
+  libpq-dev \
+  nodejs \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+<% else %>
 RUN apt-get update -qq && apt-get install -y \
   libpq-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
-
+<% end %>
 WORKDIR /app
 
 RUN groupadd -r deploy && useradd -r -g deploy deploy
