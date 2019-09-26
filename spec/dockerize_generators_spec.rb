@@ -11,6 +11,9 @@ describe 'DockerizeStack::Rails' do
     generator = DockerizeStack::Rails.new
     generator.workdir = './examples/rails'
     generator.ruby_version = '2.5.6'
+    generator.nodejs_version = '10.16.3'
+    generator.yarn_version = '1.17.3'
+    generator.javascrit_package_manager = 'npm'
     generator.database = 'postgresql'
     generator.github_private = 'no'
     generator.kubernetes = 'y'
