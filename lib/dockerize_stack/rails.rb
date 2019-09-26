@@ -17,7 +17,7 @@ module DockerizeStack
         @nodejs_version = '10.16.3'
         @yarn_version = '1.17.3'
         @ruby_version = ask_with_default('Ruby Version (default 2.5.6):', '2.5.6')
-        @javascrit_package_manager = ask('What is your Javascript package manager', limited_to: ['yarn', 'npm', 'asset_pipeline'])
+        @javascrit_package_manager = ask('What is your Javascript package manager?', limited_to: ['yarn', 'npm', 'asset_pipeline'])
         @database = ask('What is your Database?', limited_to: ['postgresql', 'mysql'])
         @rails_worker = ask_with_default('You need worker service (sidekiq example) (default yes):', 'yes')
         @github_private = ask_with_default('You need github token for private gems? (default no):', 'no')
