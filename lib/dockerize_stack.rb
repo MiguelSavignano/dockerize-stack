@@ -7,15 +7,15 @@ module DockerizeStack
   class Command < Thor
     include Thor::Actions
 
-    option :output_folder, default: '.'
-    option :ruby_version
-    option :nodejs_version, default: '10.16.3'
-    option :yarn_version
-    option :javascrit_package_manager, enum: %w[asset_pipeline yarn npm]
-    option :database, enum: %w[postgresql mysql]
-    option :rails_worker, type: :boolean
-    option :github_private, type: :boolean
-    option :kubernetes, type: :boolean
+    option :output_folder, default: '.', aliases: 'o', desc: 'Output folder'
+    option :ruby_version, banner: '2.5.6', desc: 'Ruby version'
+    option :javascrit_package_manager, banner: 'npm', enum: %w[asset_pipeline yarn npm]
+    option :nodejs_version, banner: '2.5.6', desc: 'Nodejs version'
+    option :yarn_version, banner: '2.5.6', desc: 'Yarn version'
+    option :database, banner: 'postgresql', enum: %w[postgresql mysql], desc: 'Database type'
+    option :rails_worker, type: :boolean, desc: 'Rails sidekiq examples in docker-compose.yml'
+    option :github_private, type: :boolean, desc: 'Set GITHUB_USERNAME and GITHUB_TOKEN in dockerfile bundle config'
+    option :kubernetes, type: :boolean, desc: 'Basic examples for kubernetes config (minikube)'
 
     desc 'rails', 'generate docker files for rails application'
     def rails
