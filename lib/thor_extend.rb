@@ -1,13 +1,34 @@
+require 'yaml'
+require 'json'
+
 module ThorActionsExtend
   include Thor::Actions
 
-  private
+  STRINGS = JSON.parse(
+      JSON.dump(YAML.load_file("#{File.dirname(__FILE__)}/strings.yml")),
+      symbolize_names: true
+    )
+
   def render_template(path)
-    template path, "#{@workdir}/#{path.gsub('.erb', '')}"
+    template path, "#{@output_folder}/#{path.gsub('.erb', '')}"
   end
 
-  def ask_with_default(question = '', default = '')
-    result = ask(question)
+
+  private
+  def render_template(path)
+    template path, "#{@output_folder}/#{path.gsub('.erb', '')}"
+  end
+
+  def ask_with_options(option, limited_to)
+    return @options[option] if @options[option]
+
+    ask(@questions[option], limited_to: limited_to)
+  end
+
+  def ask_with_default(option, default = '')
+    return @options[option] unless @options[option].nil?
+
+    result = ask(@questions[option])
     result != '' ? result : default
   end
 
