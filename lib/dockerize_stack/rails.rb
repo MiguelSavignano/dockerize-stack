@@ -14,13 +14,13 @@ module DockerizeStack
 
       def run(options)
         super(options)
-        render_kubernetes_templates unless ['n', 'no', '', false].include?(@kubernetes)
+        render_kubernetes_templates if @kubernetes
       end
 
       def fetch_template_variables
         @output_folder             = with_default(:output_folder)
         @nodejs_version            = with_default(:nodejs_version)
-        @yarn_version              = with_default(:yarn_version)
+        @yarn_version            = with_default(:yarn_version)
 
         @ruby_version              = ask_with_default(:ruby_version)
         @javascrit_package_manager = ask_with_options(:javascrit_package_manager)

@@ -2,6 +2,7 @@ rails:
   defaults:
     ruby_version: "2.5.6"
     nodejs_version: "10.16.3"
+    yarn_version: "1.17.3"
     javascrit_package_manager:
       - asset_pipeline
       - yarn
