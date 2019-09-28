@@ -14,7 +14,7 @@ module DockerizeStack
       end
 
       def fetch_template_variables
-        @output_folder = @options[:output_folder]
+        @output_folder = with_default(:output_folder)
         @nodejs_version = ask_with_default(:nodejs_version)
       end
 

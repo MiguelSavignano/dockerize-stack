@@ -24,17 +24,6 @@ module ThorActionsExtend
     template path, "#{@output_folder}/#{path.gsub('.erb', '')}"
   end
 
-  def template_folder(template_type)
-    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{template_type}"
-  end
-
-  def ask_with_options(option, limited_to = nil)
-    return @options[option] if @options[option]
-
-    limited_to = @config[:defaults][option] if default.nil?
-    ask(@config[:questions][option], limited_to: limited_to)
-  end
-
   def with_default(option)
     return @config[:defaults][option] if @options[option].nil?
 
@@ -48,6 +37,13 @@ module ThorActionsExtend
     result = ask(@config[:questions][option])
 
     result == '' ? default : result
+  end
+
+  def ask_with_options(option, limited_to = nil)
+    return @options[option] if @options[option]
+
+    limited_to = @config[:defaults][option] if default.nil?
+    ask(@config[:questions][option], limited_to: limited_to)
   end
 
   def ask_with_default_boolean(option)
