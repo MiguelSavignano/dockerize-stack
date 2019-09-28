@@ -1,6 +1,5 @@
 require 'yaml'
 require 'json'
-require 'pry'
 
 module ThorActionsExtend
   include Thor::Actions
@@ -34,6 +33,12 @@ module ThorActionsExtend
 
     limited_to = @config[:defaults][option] if default.nil?
     ask(@config[:questions][option], limited_to: limited_to)
+  end
+
+  def with_default(option)
+    return @config[:defaults][option] if @options[option].nil?
+
+    @options[option]
   end
 
   def ask_with_default(option, default = nil)
