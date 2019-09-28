@@ -9,21 +9,26 @@ describe 'DockerizeStack::Rails' do
 
   it '#render_templates' do
     generator = DockerizeStack::Rails.new
-    generator.workdir = './examples/rails'
-    generator.ruby_version = '2.5.6'
-    generator.database = 'postgresql'
-    generator.github_private = 'no'
-    generator.kubernetes = 'y'
+    options = {
+      output_folder: './examples/rails',
+      ruby_version:  '2.5.6',
+      nodejs_version:  '10.16.3',
+      yarn_version:  '1.17.3',
+      javascrit_package_manager: 'npm',
+      database:  'postgresql',
+      rails_worker: false,
+      github_private:  false,
+      kubernetes: false
+    }
 
-    generator.render_templates
-    generator.render_kubernetes_templates
+    generator.run(options)
   end
 
   # Test build docker image
   # docker build -t dockerize-stak-rails-example -f docker/development/Dockerfile examples/rails
 end
 
-describe 'DockerizeReact' do
+describe DockerizeStack::React do
   it '#initialize' do
     generator = DockerizeStack::React.new
     expect(generator).to be_a(DockerizeStack::React)
@@ -31,9 +36,12 @@ describe 'DockerizeReact' do
 
   it '#render_templates' do
     generator = DockerizeStack::React.new
-    generator.workdir = './examples/react-create-app'
 
-    generator.nodejs_version = '10'
-    generator.render_templates
+    options = {
+      output_folder: './examples/react-create-app',
+      nodejs_version: '10.16.3'
+    }
+
+    generator.run(options)
   end
 end

@@ -6,25 +6,23 @@ module DockerizeStack
     include Thor::Actions
     include ThorActionsExtend
 
-    attr_accessor :nodejs_version, :workdir
-
-    def self.source_root
-      "#{File.dirname(__FILE__)}/../../templates/react"
-    end
+    attr_accessor :nodejs_version, :output_folder
 
     no_commands do
-      def generate_files(path: '.')
-        @workdir = path
-        @nodejs_version = ask_with_default('Nodejs Version (default 10):', '10')
+      def template_type
+        :react
+      end
 
-        render_templates
+      def fetch_template_variables
+        @output_folder = with_default(:output_folder)
+        @nodejs_version = ask_with_default(:nodejs_version)
       end
 
       def render_templates
         render_template 'Dockerfile.erb'
         render_template '.dockerignore.erb'
 
-        directory 'nginx', "#{@workdir}/nginx"
+        directory 'nginx', "#{@output_folder}/nginx"
       end
     end
   end

@@ -2,25 +2,23 @@
 # ******Build base stage******
 # ****************************
 
-FROM node:-slim as nodejs
+FROM node:10.16.3-slim as nodejs
 
-FROM ruby:2.5.6-slim
+FROM ruby:2.5.6-slim as builder
 
-# Install common dev libs
+# Install common libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential vim git
 
 # Install Postgresql
 RUN apt-get install -y postgresql-client libpq-dev
 
-# Install Nodejs and Yarn
-ENV NODE_VERSION= YARN_VERSION=
+# Install Nodejs
+ENV NODE_VERSION=10.16.3
 COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
 COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
-COPY --from=nodejs /opt/yarn-v/ /opt/yarn-v/
 
 WORKDIR /app
-
 
 # Production config
 ARG BUNDLE_DEPLOYMENT=true
@@ -35,8 +33,8 @@ COPY Gemfile Gemfile.lock /app/
 RUN bundle install -j 4
 
 # Node modules cache layer
-COPY package.json yarn.lock /app/
-RUN yarn install --pure-lockfile
+COPY package.json package-lock.json /app/
+RUN npm ci
 
 COPY . .
 CMD "./entrypoint.sh"
@@ -49,6 +47,7 @@ FROM builder as production-builder
 
 # Build production assets
 RUN bundle exec rails assets:precompile
+
 RUN rm -r node_modules
 
 # **********************************
@@ -60,7 +59,9 @@ FROM ruby:2.5.6-slim
 ENV NODE_ENV=production RAILS_ENV=production RAILS_LOG_TO_STDOUT=true
 
 # Install system dependencies
+
 COPY --from=nodejs /usr/local/ /usr/local/
+
 RUN apt-get update -qq && apt-get install -y \
   libpq-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
