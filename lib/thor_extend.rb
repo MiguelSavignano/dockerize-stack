@@ -4,30 +4,32 @@ require 'json'
 module ThorActionsExtend
   include Thor::Actions
 
-  STRINGS = JSON.parse(
-      JSON.dump(YAML.load_file("#{File.dirname(__FILE__)}/strings.yml")),
+  CONFIG = JSON.parse(
+      JSON.dump(YAML.load_file("#{File.dirname(__FILE__)}/config.yml")),
       symbolize_names: true
     )
 
-  def render_template(path)
-    template path, "#{@output_folder}/#{path.gsub('.erb', '')}"
-  end
-
-
   private
+
   def render_template(path)
     template path, "#{@output_folder}/#{path.gsub('.erb', '')}"
   end
 
-  def ask_with_options(option, limited_to)
+  def template_folder(template_type)
+    @options[:template_folder] || "#{File.dirname(__FILE__)}/../../templates/#{template_type}"
+  end
+
+  def ask_with_options(option, limited_to = nil)
     return @options[option] if @options[option]
 
-    ask(@questions[option], limited_to: limited_to)
+    limited_to = @config[:defaults][option] if default.nil?
+    ask(@config[:questions][option], limited_to: limited_to)
   end
 
-  def ask_with_default(option, default = '')
+  def ask_with_default(option, default = nil)
     return @options[option] unless @options[option].nil?
 
+    default = @config[:defaults][option] if default.nil?
     result = ask(@questions[option])
     result != '' ? result : default
   end

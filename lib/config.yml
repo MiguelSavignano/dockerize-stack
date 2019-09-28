@@ -1,0 +1,24 @@
+rails:
+  defaults:
+    ruby_version: "2.5.6"
+    javascrit_package_manager:
+      - asset_pipeline
+      - yarn
+      - npm
+    database:
+      - postgresql
+      - mysql
+    rails_worker: true
+    github_private: false
+    kubernetes: false
+  questions:
+    ruby_version: "Ruby Version (default 2.5.6):"
+    javascrit_package_manager: What is your Javascript package manager?
+    database: What is your Database?
+    rails_worker: You need worker service (sidekiq example) (default yes)
+    github_private: You need github token for private gems? (default no)
+    kubernetes: You want generate docker-stack for kubernetes? y/n'
+
+react:
+  questions:
+    nodejs_version: Nodejs Version (default 10)

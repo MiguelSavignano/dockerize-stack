@@ -23,10 +23,13 @@ module DockerizeStack
       DockerizeStack::Rails.new.generate_files(options)
     end
 
-    option :path
+    option :template_folder, aliases: 't', desc: 'Template folder path'
+    option :output_folder, default: '.', aliases: 'o', desc: 'Output folder'
+    option :nodejs_version, banner: '10.16.3', dec: 'Nodejs version'
+
     desc 'react', 'generate docker files for create react app'
     def react
-      DockerizeStack::React.new.generate_files(path: options[:path])
+      DockerizeStack::React.new.generate_files(options)
     end
   end
 end

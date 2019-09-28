@@ -7,30 +7,24 @@ module DockerizeStack
     attr_accessor :ruby_version, :javascrit_package_manager, :nodejs_version,
                   :yarn_version, :database, :github_private, :kubernetes, :output_folder
 
-
-
     no_commands do
       def fetch_template_variables
         @output_folder             = @options[:output_folder]
         @nodejs_version            = @options[:nodejs_version]
         @yarn_version              = @options[:yarn_version]
 
-        @ruby_version              = ask_with_default(:ruby_version, '2.5.6')
-        @javascrit_package_manager = ask_with_options(:javascrit_package_manager, %w[asset_pipeline yarn npm])
-        @database                  = ask_with_options(:database, %w[postgresql mysql])
-        @rails_worker              = ask_with_default(:rails_worker, 'y')
-        @github_private            = ask_with_default(:github_private, 'n')
-        @kubernetes                = ask_with_default(:kubernetes, 'n')
-      end
-
-      def template_folder
-        @options[:template_folder] || "#{File.dirname(__FILE__)}/../../templates/rails"
+        @ruby_version              = ask_with_default(:ruby_version)
+        @javascrit_package_manager = ask_with_options(:javascrit_package_manager)
+        @database                  = ask_with_options(:database)
+        @rails_worker              = ask_with_default(:rails_worker)
+        @github_private            = ask_with_default(:github_private)
+        @kubernetes                = ask_with_default(:kubernetes)
       end
 
       def generate_files(options)
         @options = options
-        @questions = STRINGS[:rails][:questions]
-        DockerizeStack::Rails.source_root(template_folder)
+        @config = CONFIG[:rails]
+        DockerizeStack::Rails.source_root(template_folder("rails"))
 
         fetch_template_variables
         render_templates
