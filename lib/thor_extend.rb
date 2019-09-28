@@ -49,6 +49,9 @@ module ThorActionsExtend
     return @options[option] unless @options[option].nil?
 
     result = ask(@config[:questions][option])
+    default = @config[:defaults][option] if default.nil?
+    return default if result == ''
+
     %w[yes y true].include?(result) ? true : false
   end
 
