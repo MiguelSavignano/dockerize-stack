@@ -38,7 +38,15 @@ docker run --user $(id -u) -it -v $(pwd):/usr/src devmasx/dockerize-stack rails
 
 ## Rails Templates
 
+[rails example](./examples/rails)
+
 By default the Dockerfile config is for production enviroment; using docker multistage feature and ARG (Build arguments) at the build time this Dockerfile is the same for development and production.
+
+See all options:
+
+```
+dockerize-stack help rails
+```
 
 Build a docker image for development enviroment:
 
@@ -50,17 +58,11 @@ docker build -t rails-example \
  .
 ```
 
-This script ask you:
-
-- Ruby version
-- Database type
-- Worker service
-- Github token
-- Kubernetes examples
-
-[rails example](./examples/rails)
-
 ## TODO
 
 - [ ] Add integrations with all database types rails new supported ([mysql/postgresql/sqlite3/oracle/frontbase/ibm_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc])
 - [x] Integrate Build with private repositories
+
+```
+
+```
