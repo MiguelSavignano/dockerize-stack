@@ -25,9 +25,9 @@ module DockerizeStack
         @ruby_version              = ask_with_default(:ruby_version)
         @javascrit_package_manager = ask_with_options(:javascrit_package_manager)
         @database                  = ask_with_options(:database)
-        @rails_worker              = ask_with_default(:rails_worker)
-        @github_private            = ask_with_default(:github_private)
-        @kubernetes                = ask_with_default(:kubernetes)
+        @rails_worker              = ask_with_default_boolean(:rails_worker)
+        @github_private            = ask_with_default_boolean(:github_private)
+        @kubernetes                = ask_with_default_boolean(:kubernetes)
       end
 
       def render_templates

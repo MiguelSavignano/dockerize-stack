@@ -1,5 +1,6 @@
 require 'yaml'
 require 'json'
+require 'pry'
 
 module ThorActionsExtend
   include Thor::Actions
@@ -39,8 +40,16 @@ module ThorActionsExtend
     return @options[option] unless @options[option].nil?
 
     default = @config[:defaults][option] if default.nil?
-    result = ask(@questions[option])
-    result != '' ? result : default
+    result = ask(@config[:questions][option])
+
+    result == '' ? default : result
+  end
+
+  def ask_with_default_boolean(option)
+    return @options[option] unless @options[option].nil?
+
+    result = ask(@config[:questions][option])
+    %w[yes y true].include?(result) ? true : false
   end
 
   def append_or_create(file_path, file_content)
