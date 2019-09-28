@@ -7,9 +7,7 @@ module DockerizeStack
     attr_accessor :ruby_version, :javascrit_package_manager, :nodejs_version,
                   :yarn_version, :database, :github_private, :kubernetes, :output_folder
 
-    def self.source_root
-      "#{File.dirname(__FILE__)}/../../templates/rails"
-    end
+
 
     no_commands do
       def fetch_template_variables
@@ -25,9 +23,14 @@ module DockerizeStack
         @kubernetes                = ask_with_default(:kubernetes, 'n')
       end
 
+      def template_folder
+        @options[:template_folder] || "#{File.dirname(__FILE__)}/../../templates/rails"
+      end
+
       def generate_files(options)
         @options = options
         @questions = STRINGS[:rails][:questions]
+        DockerizeStack::Rails.source_root(template_folder)
 
         fetch_template_variables
         render_templates

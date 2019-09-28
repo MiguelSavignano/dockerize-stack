@@ -7,6 +7,7 @@ module DockerizeStack
   class Command < Thor
     include Thor::Actions
 
+    option :template_folder, aliases: 't', desc: 'Template folder path'
     option :output_folder, default: '.', aliases: 'o', desc: 'Output folder'
     option :ruby_version, banner: '2.5.6', desc: 'Ruby version'
     option :javascrit_package_manager, banner: 'npm', enum: %w[asset_pipeline yarn npm]
