@@ -16,7 +16,7 @@ module ThorActionsExtend
   end
 
   def template_folder(template_type)
-    @options[:template_folder] || "#{File.dirname(__FILE__)}/../../templates/#{template_type}"
+    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{template_type}"
   end
 
   def ask_with_options(option, limited_to = nil)

@@ -23,8 +23,13 @@ module DockerizeStack
 
       def generate_files(options)
         @options = options
+        @questions = STRINGS[:rails][:questions]
+      end
+
+      def generate_files(options)
+        @options = options
         @config = CONFIG[:rails]
-        DockerizeStack::Rails.source_root(template_folder("rails"))
+        DockerizeStack::Rails.source_root(template_folder('rails'))
 
         fetch_template_variables
         render_templates
