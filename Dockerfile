@@ -1,4 +1,4 @@
-FROM ruby:2.5.1-alpine
+FROM ruby:2.6.4-alpine
 WORKDIR /usr/src
 COPY Gemfile Gemfile.lock /app/
 COPY . .
