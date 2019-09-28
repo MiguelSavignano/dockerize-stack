@@ -1,5 +1,7 @@
 bundle check || bundle install
 rake db:create db:migrate
 rm -f tmp/pids/server.pid
+<% if javascrit_package_manager == "asset_pipeline" %>
 rm -rf public/packs/* || true && bin/webpack-dev-server &
+<% end %>
 bundle exec rails server -p 3000 -b 0.0.0.0

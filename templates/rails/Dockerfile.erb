@@ -54,6 +54,7 @@ RUN yarn install --pure-lockfile
 # Node modules cache layer
 COPY package.json package-lock.json /app/
 RUN npm ci
+<% elsif javascrit_package_manager == "asset_pipeline" %>
 <% end %>
 COPY . .
 CMD "./entrypoint.sh"
