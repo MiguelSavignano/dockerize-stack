@@ -36,9 +36,12 @@ describe 'DockerizeStack::React' do
 
   it '#render_templates' do
     generator = DockerizeStack::React.new
-    generator.workdir = './examples/react-create-app'
 
-    generator.nodejs_version = '10'
-    generator.render_templates
+    options = {
+      output_folder: './examples/react-create-app',
+      nodejs_version:  '10.16.3'
+    }
+
+    generator.generate_files(options)
   end
 end

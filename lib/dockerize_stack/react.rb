@@ -8,15 +8,18 @@ module DockerizeStack
 
     attr_accessor :nodejs_version, :workdir
 
-    def self.source_root
-      "#{File.dirname(__FILE__)}/../../templates/react"
-    end
-
     no_commands do
-      def generate_files(path: '.')
-        @workdir = path
-        @nodejs_version = ask_with_default('Nodejs Version (default 10):', '10')
+      def fetch_template_variables
+        @output_folder             = @options[:output_folder]
+        @nodejs_version = ask_with_default(:nodejs_version)
+      end
 
+      def generate_files(options)
+        @options = options
+        @config = CONFIG[:react]
+        DockerizeStack::React.source_root(template_folder('react'))
+
+        fetch_template_variables
         render_templates
       end
 
@@ -24,7 +27,7 @@ module DockerizeStack
         render_template 'Dockerfile.erb'
         render_template '.dockerignore.erb'
 
-        directory 'nginx', "#{@workdir}/nginx"
+        directory 'nginx', "#{@output_folder}/nginx"
       end
     end
   end
