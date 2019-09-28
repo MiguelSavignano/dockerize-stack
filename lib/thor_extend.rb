@@ -20,6 +20,10 @@ module ThorActionsExtend
 
   private
 
+  def template_folder(template_type)
+    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{template_type}"
+  end
+
   def render_template(path)
     template path, "#{@output_folder}/#{path.gsub('.erb', '')}"
   end
