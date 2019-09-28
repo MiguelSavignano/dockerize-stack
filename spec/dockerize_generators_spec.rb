@@ -28,7 +28,7 @@ describe 'DockerizeStack::Rails' do
   # docker build -t dockerize-stak-rails-example -f docker/development/Dockerfile examples/rails
 end
 
-describe 'DockerizeStack::React' do
+describe DockerizeStack::React do
   it '#initialize' do
     generator = DockerizeStack::React.new
     expect(generator).to be_a(DockerizeStack::React)
@@ -39,9 +39,9 @@ describe 'DockerizeStack::React' do
 
     options = {
       output_folder: './examples/react-create-app',
-      nodejs_version:  '10.16.3'
+      nodejs_version: '10.16.3'
     }
 
-    generator.generate_files(options)
+    generator.run(options)
   end
 end

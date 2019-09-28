@@ -8,6 +8,15 @@ module DockerizeStack
                   :yarn_version, :database, :github_private, :kubernetes, :output_folder
 
     no_commands do
+      def template_type
+        :rails
+      end
+
+      def run(options)
+        super(options)
+        render_kubernetes_templates unless ['n', 'no', '', false].include?(@kubernetes)
+      end
+
       def fetch_template_variables
         @output_folder             = @options[:output_folder]
         @nodejs_version            = @options[:nodejs_version]
@@ -19,16 +28,6 @@ module DockerizeStack
         @rails_worker              = ask_with_default(:rails_worker)
         @github_private            = ask_with_default(:github_private)
         @kubernetes                = ask_with_default(:kubernetes)
-      end
-
-      def run(options)
-        @options = options
-        @config = CONFIG[:rails]
-        DockerizeStack::Rails.source_root(template_folder('rails'))
-
-        fetch_template_variables
-        render_templates
-        render_kubernetes_templates unless ['n', 'no', '', false].include?(@kubernetes)
       end
 
       def render_templates

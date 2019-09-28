@@ -29,7 +29,7 @@ module DockerizeStack
 
     desc 'react', 'generate docker files for create react app'
     def react
-      DockerizeStack::React.new.generate_files(options)
+      DockerizeStack::React.new.run(options)
     end
   end
 end

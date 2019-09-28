@@ -8,6 +8,15 @@ module ThorActionsExtend
       JSON.dump(YAML.load_file("#{File.dirname(__FILE__)}/config.yml")),
       symbolize_names: true
     )
+  def run(options)
+    @template_type = template_type
+    @options = options
+    @config = CONFIG[@template_type]
+    self.class.source_root(template_folder(@template_type.to_s))
+
+    fetch_template_variables
+    render_templates
+  end
 
   private
 

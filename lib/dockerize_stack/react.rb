@@ -6,21 +6,16 @@ module DockerizeStack
     include Thor::Actions
     include ThorActionsExtend
 
-    attr_accessor :nodejs_version, :workdir
+    attr_accessor :nodejs_version, :output_folder
 
     no_commands do
-      def fetch_template_variables
-        @output_folder             = @options[:output_folder]
-        @nodejs_version = ask_with_default(:nodejs_version)
+      def template_type
+        :react
       end
 
-      def generate_files(options)
-        @options = options
-        @config = CONFIG[:react]
-        DockerizeStack::React.source_root(template_folder('react'))
-
-        fetch_template_variables
-        render_templates
+      def fetch_template_variables
+        @output_folder = @options[:output_folder]
+        @nodejs_version = ask_with_default(:nodejs_version)
       end
 
       def render_templates
