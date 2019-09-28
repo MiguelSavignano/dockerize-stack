@@ -28,9 +28,10 @@ module DockerizeStack
       def generate_files(options)
         @options = options
         @questions = STRINGS[:rails][:questions]
+
         fetch_template_variables
         render_templates
-        render_kubernetes_templates unless ['n', 'no', ''].include?(@kubernetes)
+        render_kubernetes_templates unless ['n', 'no', '', false].include?(@kubernetes)
       end
 
       def render_templates
