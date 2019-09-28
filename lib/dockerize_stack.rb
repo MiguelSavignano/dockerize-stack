@@ -20,7 +20,7 @@ module DockerizeStack
 
     desc 'rails', 'generate docker files for rails application'
     def rails
-      DockerizeStack::Rails.new.generate_files(options)
+      DockerizeStack::Rails.new.run(options)
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'

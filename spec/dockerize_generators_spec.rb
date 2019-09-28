@@ -21,7 +21,7 @@ describe 'DockerizeStack::Rails' do
       kubernetes: false
     }
 
-    generator.generate_files(options)
+    generator.run(options)
   end
 
   # Test build docker image

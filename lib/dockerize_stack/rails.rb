@@ -21,12 +21,7 @@ module DockerizeStack
         @kubernetes                = ask_with_default(:kubernetes)
       end
 
-      def generate_files(options)
-        @options = options
-        @questions = STRINGS[:rails][:questions]
-      end
-
-      def generate_files(options)
+      def run(options)
         @options = options
         @config = CONFIG[:rails]
         DockerizeStack::Rails.source_root(template_folder('rails'))
