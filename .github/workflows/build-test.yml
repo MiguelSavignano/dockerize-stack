@@ -31,6 +31,9 @@ jobs:
 
       # - uses: olegtarasov/get-tag@j1
       #   id: tagName
+      - name: Echo
+        run: |
+          echo $GITHUB_REF
 
       - name: Publish
         if: contains(github.ref, 'refs/tags/')
