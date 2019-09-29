@@ -3,7 +3,7 @@ name: Ruby
 on:
   push:
     branches:
-      - *
+      - "*"
     tags:
       - v*
 jobs:
@@ -28,7 +28,6 @@ jobs:
           rspec
 
       - name: Echo version
-        needs: ["Tag Filter"]
         run: |
           echo $GITHUB_REF
       # - name: Publish to RubyGems
