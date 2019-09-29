@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
       # - name: Set up Ruby 2.6
       #   uses: actions/setup-ruby@v1
@@ -29,13 +29,32 @@ jobs:
       #   run: |
       #     rspec
 
-      # - uses: olegtarasov/get-tag@j1
-      #   id: tagName
       - name: Echo
         run: |
           echo $GITHUB_REF
 
-      - name: Publish
-        if: contains(github.ref, 'refs/tags/')
-        run: |
-          echo $GITHUB_REF
+      # - name: Publish to RubyGems
+      #   if: contains(github.ref, 'refs/tags/v')
+      #   uses: cadwallion/publish-rubygems-action@master
+      #   env:
+      #     RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
+      #     RELEASE_COMMAND: rake release
+      - name: Publish to Dockerhub
+        if: contains(github.ref, 'refs/tags/v')
+        uses: MiguelSavignano/Publish-Docker-Github-Action@master
+        with:
+          name: devmasx/dockerize-stack
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: Publish to Dockerhub
+      #   if: contains(github.ref, 'refs/tags/v')
+      #   env:
+      #     DOCKER_USER: ${{secrets.DOCKER_USER}}
+      #     DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      #   run: |
+      #     DOCKER_TAG=$($GITHUB_REF | sed -e 's/refs\/tags\/v//')
+      #     DOCKER_IMAGE_NAME=devmasx/dockerize-stack
+      #     docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      #     docker build --no-cache -t DOCKER_IMAGE_NAME -t $DOCKER_IMAGE_NAME:$DOCKER_TAG
+      #     docker push $DOCKER_IMAGE_NAME
+      #     docker push $DOCKER_IMAGE_NAME
