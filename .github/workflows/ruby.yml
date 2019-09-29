@@ -38,3 +38,18 @@ jobs:
       #   env:
       #     RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
       #     RELEASE_COMMAND: rake release
+  tag-filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tag filter
+        uses: actions/bin/filter@master
+        args: "tag v*"
+  publish-gem:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo version
+        needs: ["tag-filter"]
+        # if: contains(github.ref, 'refs/heads/v')
+        run: |
+          echo $GITHUB_REF
+          echo $GITHUB_EVENT
