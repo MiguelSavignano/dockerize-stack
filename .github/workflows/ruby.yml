@@ -22,7 +22,7 @@ jobs:
           rspec
       - name: Publish to RubyGems
       - uses: cadwallion/publish-rubygems-action@master
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/github-actions-publish-gem'
         env:
           RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
           RELEASE_COMMAND: gem build *.gemspec && gem push *.gem
