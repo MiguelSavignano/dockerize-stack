@@ -25,4 +25,4 @@ jobs:
         if: github.ref == 'refs/heads/github-actions-publish-gem'
         env:
           RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
-          RELEASE_COMMAND: ./release.sh
+          RELEASE_COMMAND: rake release
