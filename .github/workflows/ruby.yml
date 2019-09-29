@@ -25,15 +25,15 @@ jobs:
 
       - name: Test
         run: |
-          rspec
+          git rspec
 
       - name: Echo version
+        if: contains(github.ref, 'refs/heads/v*')
         run: |
           echo $GITHUB_REF
       # - name: Publish to RubyGems
       #   uses: cadwallion/publish-rubygems-action@master
       #   needs: ["Tag Filter"]
-      #   # if: github.ref == 'refs/heads/master'
       #   env:
       #     RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
       #     RELEASE_COMMAND: rake release
