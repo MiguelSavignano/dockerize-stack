@@ -26,3 +26,11 @@ jobs:
       - name: Test
         run: |
           rspec
+
+      - uses: olegtarasov/get-tag@j1
+        id: tagName
+
+      - name: Publish
+        if: contains(steps.tagName.outputs.tag, 'v')
+        run: |
+          rspec
