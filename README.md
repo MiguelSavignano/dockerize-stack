@@ -62,7 +62,3 @@ docker build -t rails-example \
 
 - [ ] Add integrations with all database types rails new supported ([mysql/postgresql/sqlite3/oracle/frontbase/ibm_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc])
 - [x] Integrate Build with private repositories
-
-```
-
-```

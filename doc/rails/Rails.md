@@ -1,9 +1,9 @@
-# Rails stack
+# Rails stack for development
 
-## Dockerfiles
+## Dockerfile
+
 [docker-compose.yml](examples/rails/docker-compose.yml)
-[Dockerfile](examples/rails/docker/development/Dockerfile)
-[Dockerfile Production](examples/rails/docker/production/Dockerfile)
+[Dockerfile](examples/rails/Dockerfile)
 
 ## Common problems
 
@@ -22,9 +22,11 @@ use bybug or pry debugger.
 
 Solution:
 docker-compose don't have a interactive terminal and you need to attach the container with
+
 ```sh
 docker attach web
 ```
+
 warning | in attach mode if you exit with Ctrl+c the container will be stop and you need to use docker-compose up again
 To detach the tty without exiting the shell,
 use the escape sequence Ctrl-p + Ctrl-q
@@ -36,11 +38,13 @@ You need to run migrations every time you start the container
 Solution: use local volumens to save database data
 
 ### Rails generators
+
 When Using docker-compose run web rails g model ...
 The files create in the container the owner it's root user;
 if you use this files outside the container you can't modify them
 
 Solution:
+
 ```
 docker-compose run --user $(id -u) web bash
 ```
