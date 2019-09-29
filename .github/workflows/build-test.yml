@@ -4,33 +4,35 @@ on:
   push:
     branches:
       - "*"
+    tags:
+      - v*
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      # - uses: actions/checkout@v1
 
-      - name: Set up Ruby 2.6
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.6.x
+      # - name: Set up Ruby 2.6
+      #   uses: actions/setup-ruby@v1
+      #   with:
+      #     ruby-version: 2.6.x
 
-      - name: Build
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-          gem install rspec
+      # - name: Build
+      #   run: |
+      #     gem install bundler
+      #     bundle install --jobs 4 --retry 3
+      #     gem install rspec
 
-      - name: Test
-        run: |
-          rspec
+      # - name: Test
+      #   run: |
+      #     rspec
 
-      - uses: olegtarasov/get-tag@j1
-        id: tagName
+      # - uses: olegtarasov/get-tag@j1
+      #   id: tagName
 
       - name: Publish
-        if: contains(steps.tagName.outputs.tag, 'v')
+        if: contains(github.ref, 'refs/tags/')
         run: |
-          rspec
+          echo $GITHUB_REF
