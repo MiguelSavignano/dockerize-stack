@@ -20,7 +20,7 @@ module DockerizeStack
 
       def render_templates
         render_template 'Dockerfile.erb'
-        render_template '.dockerignore.erb'
+        render_template 'dockerignore.erb', '.dockerignore'
 
         directory 'nginx', "#{@output_folder}/nginx"
       end
