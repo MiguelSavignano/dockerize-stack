@@ -28,7 +28,7 @@ jobs:
       #     rspec
 
       - name: Echo version
-        if: contains(github.ref, 'refs/heads/v') &&
+        # if: contains(github.ref, 'refs/heads/v')
         run: |
           echo $GITHUB_REF
           echo $GITHUB_EVENT_NAME
