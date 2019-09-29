@@ -46,7 +46,7 @@ module ThorActionsExtend
   def ask_with_options(option, limited_to = nil)
     return @options[option] if @options[option]
 
-    limited_to = @config[:defaults][option] if default.nil?
+    limited_to = @config[:defaults][option] if limited_to.nil?
     ask(@config[:questions][option], limited_to: limited_to)
   end
 
