@@ -12,17 +12,29 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.6.x
+
       - name: Build
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
           gem install rspec
+
       - name: Test
         run: |
           rspec
-      - name: Publish to RubyGems
-        uses: cadwallion/publish-rubygems-action@master
-        if: github.ref == 'refs/heads/master'
-        env:
-          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
-          RELEASE_COMMAND: rake release
+
+      - name: Tag Filter
+        uses: actions/bin/filter@master
+        args: tag v*
+
+      - name: Echo version
+        run: |
+          echo $GITHUB_REF
+        needs: ["Tag Filter"]
+      # - name: Publish to RubyGems
+      #   uses: cadwallion/publish-rubygems-action@master
+      #   needs: ["Tag Filter"]
+      #   # if: github.ref == 'refs/heads/master'
+      #   env:
+      #     RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
+      #     RELEASE_COMMAND: rake release
