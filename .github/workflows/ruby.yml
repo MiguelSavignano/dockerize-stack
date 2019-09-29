@@ -28,9 +28,10 @@ jobs:
       #     rspec
 
       - name: Echo version
-        if: contains(github.ref, 'refs/heads/v*')
+        if: contains(github.ref, 'refs/heads/v') &&
         run: |
           echo $GITHUB_REF
+          echo $GITHUB_EVENT_NAME
       # - name: Publish to RubyGems
       #   uses: cadwallion/publish-rubygems-action@master
       #   needs: ["Tag Filter"]
