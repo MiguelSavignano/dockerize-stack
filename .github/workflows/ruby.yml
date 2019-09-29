@@ -1,7 +1,11 @@
 name: Ruby
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - *
+    tags:
+      - v*
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,15 +27,10 @@ jobs:
         run: |
           rspec
 
-      - name: Tag Filter
-        uses: actions/bin/filter@master
-        with:
-          args: tag v*
-
       - name: Echo version
+        needs: ["Tag Filter"]
         run: |
           echo $GITHUB_REF
-        needs: ["Tag Filter"]
       # - name: Publish to RubyGems
       #   uses: cadwallion/publish-rubygems-action@master
       #   needs: ["Tag Filter"]
