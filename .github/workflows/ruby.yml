@@ -43,7 +43,8 @@ jobs:
     steps:
       - name: Tag filter
         uses: actions/bin/filter@master
-        args: "tag v*"
+        with:
+          args: "tag v*"
   publish-gem:
     runs-on: ubuntu-latest
     steps:
