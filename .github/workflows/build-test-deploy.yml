@@ -1,4 +1,4 @@
-name: Build and test
+name: Ruby gem
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
 
       - name: Publish to RubyGems
         if: contains(github.ref, 'refs/tags/v')
-        uses: cadwallion/publish-rubygems-action@master
+        uses: devmasx/publish-rubygems-action
         env:
           RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
           RELEASE_COMMAND: rake release
