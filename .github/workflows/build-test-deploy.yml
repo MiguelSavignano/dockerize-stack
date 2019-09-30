@@ -38,7 +38,7 @@ jobs:
 
       - name: Publish to Dockerhub
         if: contains(github.ref, 'refs/tags/v')
-        uses: MiguelSavignano/Publish-Docker-Github-Action@master
+        uses: devmasx/Publish-Docker-Github-Action@master
         with:
           name: devmasx/dockerize-stack
           username: ${{ secrets.DOCKER_USERNAME }}
