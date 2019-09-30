@@ -31,7 +31,7 @@ jobs:
 
       - name: Publish to RubyGems
         if: contains(github.ref, 'refs/tags/v')
-        uses: devmasx/publish-rubygems-action
+        uses: devmasx/publish-rubygems-action@master
         env:
           RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
           RELEASE_COMMAND: rake release
