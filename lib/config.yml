@@ -22,7 +22,18 @@ rails:
     kubernetes: You want generate docker-stack for kubernetes? y/n (default no)'
 
 react:
-  defaults:
-    nodejs_version: "10.16.3"
   questions:
-    nodejs_version: "Nodejs version (default 10.16.3):"
+    - option: nodejs_version
+      title: "Nodejs version (default 10.16.3):"
+      default: "10.16.3"
+      type: ask_with_default
+
+    - option: output_folder
+      title: ""
+      default: "./"
+      type: with_default
+
+    - option: output_folder
+      title: ""
+      default: "./"
+      type: with_default

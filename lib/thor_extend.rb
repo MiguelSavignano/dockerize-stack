@@ -1,27 +1,58 @@
 require 'yaml'
 require 'json'
+require 'pry'
 
 module ThorActionsExtend
   include Thor::Actions
 
   CONFIG = JSON.parse(
-      JSON.dump(YAML.load_file("#{File.dirname(__FILE__)}/config.yml")),
-      symbolize_names: true
-    )
+    JSON.dump(YAML.load_file("#{File.dirname(__FILE__)}/config.yml")),
+    symbolize_names: true
+  )
+
   def run(options)
-    @template_type = template_type
+    @template_type = :react
     @options = options
+    @output_folder = options[:output_folder]
     @config = CONFIG[@template_type]
-    self.class.source_root(template_folder(@template_type.to_s))
+    self.class.source_root(template_folder)
 
     fetch_template_variables
     render_templates
   end
 
+  def fetch_template_variables
+    @config[:questions].each do |question|
+      default = question[:default]
+      option = question[:option]
+      title = question[:title]
+      type = question[:type]
+      # binding.pry
+      case type
+      when 'with_default'
+        return default if @options[option].nil?
+
+        @options[option]
+      when 'ask_with_default'
+        return @options[option] unless @options[option].nil?
+
+        result = ask(title)
+        result == '' ? default : result
+      else
+        raise 'Invalid question type'
+      end
+    end
+  end
+
   private
 
-  def template_folder(template_type)
-    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{template_type}"
+  def render_template(template_file)
+    result = ERB.new(File.read("#{template_folder}/#{template_file}")).result(binding)
+    File.write("#{@output_folder}/#{template_file.gsub('.erb', '')}", result)
+  end
+
+  def template_folder
+    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{@template_type}"
   end
 
   def render_template(path, target_path = path)
