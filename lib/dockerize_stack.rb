@@ -47,7 +47,20 @@ module DockerizeStack
 
     desc 'rails', 'generate docker files for rails application'
     def rails
-      DockerizeStack::Rails.new.run(options)
+       run(options, :rails)
+       render_template 'Dockerfile.erb'
+       render_template 'dockerignore.erb', '.dockerignore'
+       directory 'nginx', "#{@output_folder}/nginx"
+       render_template 'Dockerfile.erb'
+       render_template 'entrypoint.sh.erb'
+       render_template 'docker-compose.yml.erb'
+       render_template 'config/database-docker.yml.erb'
+       render_template 'dockerignore.erb', '.dockerignore'
+
+       if @kubernetes
+         directory 'kubernetes', "#{@output_folder}/kubernetes"
+       end
+       puts 'Update your database.yml based in database-docker.yml'
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
@@ -56,7 +69,10 @@ module DockerizeStack
 
     desc 'react', 'generate docker files for create react app'
     def react
-      DockerizeStack::React.new.run(options)
+      run(options, :react)
+      render_template 'Dockerfile.erb'
+      render_template 'dockerignore.erb', '.dockerignore'
+      directory 'nginx', "#{@output_folder}/nginx"
     end
   end
 end

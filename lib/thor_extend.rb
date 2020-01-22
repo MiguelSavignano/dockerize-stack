@@ -10,15 +10,15 @@ module ThorActionsExtend
     symbolize_names: true
   )
 
-  def run(options)
-    @template_type = :react
+  def run(options, template_type = :rails)
+    @template_type = template_type
     @options = options
     @output_folder = options[:output_folder]
     @config = CONFIG[@template_type]
     self.class.source_root(template_folder)
 
     fetch_template_variables
-    render_templates
+    # render_templates
   end
 
   def fetch_template_variables
@@ -38,6 +38,8 @@ module ThorActionsExtend
 
         result = ask(title)
         result == '' ? default : result
+      when 'ask_with_default_boolean'
+        ask_with_default_boolean(question)
       else
         raise 'Invalid question type'
       end
@@ -81,11 +83,10 @@ module ThorActionsExtend
     ask(@config[:questions][option], limited_to: limited_to)
   end
 
-  def ask_with_default_boolean(option)
-    return @options[option] unless @options[option].nil?
+  def ask_with_default_boolean(option:, title:, default:)
+    return option unless option.nil?
 
-    result = ask(@config[:questions][option])
-    default = @config[:defaults][option] if default.nil?
+    result = ask(title)
     return default if result == ''
 
     %w[yes y true].include?(result) ? true : false

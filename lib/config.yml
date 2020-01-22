@@ -1,6 +1,6 @@
 rails:
   defaults:
-    ruby_version: "2.5.6"
+    ruby_version:
     nodejs_version: "10.16.3"
     yarn_version: "1.17.3"
     javascrit_package_manager:
@@ -14,12 +14,35 @@ rails:
     github_private: false
     kubernetes: false
   questions:
-    ruby_version: "Ruby Version (default 2.5.6):"
-    javascrit_package_manager: What is your Javascript package manager?
-    database: What is your Database?
-    rails_worker: You need workers with sidekiq? y/n, (default y)
-    github_private: You need github token for private gems? y/n (default no)
-    kubernetes: You want generate docker-stack for kubernetes? y/n (default no)'
+    - option: ruby_version
+      title: "Ruby Version (default 2.5.6):"
+      default: "2.5.6"
+      type: ask_with_default
+
+    - option: javascrit_package_manager
+      title: What is your Javascript package manager?
+      default: "./"
+      type: ask_with_options
+
+    - option: database
+      title: What is your Database?
+      default: "./"
+      type: ask_with_options
+
+    - option: rails_worker
+      title: You need workers with sidekiq? y/n, (default y)
+      default: "./"
+      type: ask_with_default_boolean
+
+    - option: github_private
+      title: You need github token for private gems? y/n (default no)
+      default: "./"
+      type: ask_with_default_boolean
+
+    - option: kubernetes
+      title: You want generate docker-stack for kubernetes? y/n (default no)
+      default: "./"
+      type: ask_with_default_boolean
 
 react:
   questions:
