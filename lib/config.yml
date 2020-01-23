@@ -1,18 +1,4 @@
 rails:
-  defaults:
-    ruby_version:
-    nodejs_version: "10.16.3"
-    yarn_version: "1.17.3"
-    javascrit_package_manager:
-      - asset_pipeline
-      - yarn
-      - npm
-    database:
-      - postgresql
-      - mysql
-    rails_worker: true
-    github_private: false
-    kubernetes: false
   questions:
     - option: ruby_version
       title: "Ruby Version (default 2.5.6):"
@@ -23,11 +9,18 @@ rails:
       title: What is your Javascript package manager?
       default: "./"
       type: ask_with_options
+      ask_options:
+        - asset_pipeline
+        - yarn
+        - npm
 
     - option: database
       title: What is your Database?
       default: "./"
       type: ask_with_options
+      ask_options:
+        - postgresql
+        - mysql
 
     - option: rails_worker
       title: You need workers with sidekiq? y/n, (default y)

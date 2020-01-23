@@ -7,7 +7,6 @@ module DockerizeStack
   class Command < Thor
     include Thor::Actions
     include ThorActionsExtend
-    RAILS_CONFIG_DEFAULTS = CONFIG.dig(:rails, :defaults)
 
     option :template_folder,
            aliases: 't',
@@ -17,32 +16,32 @@ module DockerizeStack
            aliases: 'o',
            desc: 'Output folder'
     option :ruby_version,
-           banner: RAILS_CONFIG_DEFAULTS[:ruby_version],
+           banner: [],
            desc: 'Ruby version'
     option :javascrit_package_manager,
            banner: 'npm',
-           enum: RAILS_CONFIG_DEFAULTS[:javascrit_package_manager]
+           enum: []
     option :nodejs_version,
-           banner: RAILS_CONFIG_DEFAULTS[:nodejs_version],
+           banner: [],
            desc: 'Nodejs version'
     option :yarn_version,
-           banner: RAILS_CONFIG_DEFAULTS[:yarn_version],
+           banner: [],
            desc: 'Yarn version'
     option :database,
            banner: 'postgresql',
-           enum: RAILS_CONFIG_DEFAULTS[:database],
+           enum: [],
            desc: 'Database type'
     option :rails_worker,
            type: :boolean,
-           banner: RAILS_CONFIG_DEFAULTS[:rails_worker],
+           banner: [],
            desc: 'Rails sidekiq examples in docker-compose.yml'
     option :github_private,
            type: :boolean,
-           banner: RAILS_CONFIG_DEFAULTS[:github_private],
+           banner: [],
            desc: 'Set GITHUB_USERNAME and GITHUB_TOKEN in dockerfile bundle config'
     option :kubernetes,
            type: :boolean,
-           banner: RAILS_CONFIG_DEFAULTS[:kubernetes],
+           banner: [],
            desc: 'Basic examples for kubernetes config (minikube)'
 
     desc 'rails', 'generate docker files for rails application'

@@ -40,8 +40,12 @@ module ThorActionsExtend
         result == '' ? default : result
       when 'ask_with_default_boolean'
         ask_with_default_boolean(question)
+      when 'ask_with_options'
+        return @options[option] if @options[option]
+
+        ask(title, limited_to: question[:ask_options])
       else
-        raise 'Invalid question type'
+        raise "Invalid question type: #{type}"
       end
     end
   end
@@ -83,7 +87,7 @@ module ThorActionsExtend
     ask(@config[:questions][option], limited_to: limited_to)
   end
 
-  def ask_with_default_boolean(option:, title:, default:)
+  def ask_with_default_boolean(option:, title:, default:, type:)
     return option unless option.nil?
 
     result = ask(title)
