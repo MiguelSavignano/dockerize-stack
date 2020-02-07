@@ -1,7 +1,5 @@
 require 'thor'
 require_relative './thor_extend.rb'
-require_relative './dockerize_stack/react.rb'
-require_relative './dockerize_stack/rails.rb'
 
 module DockerizeStack
   class Command < Thor

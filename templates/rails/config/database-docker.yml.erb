@@ -1,6 +1,6 @@
 # Update your database.yml based in database-docker.yml
 
-<% if database == "postgresql" %>
+<% if @database == "postgresql" %>
 # Install the pg driver:
 #   gem install pg
 
@@ -14,7 +14,7 @@ default: &default
   password: <%%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
   pool: <%%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-<% elsif database == "mysql" %>
+<% elsif @database == "mysql" %>
 # Install the MySQL driver
 #   gem install mysql2
 

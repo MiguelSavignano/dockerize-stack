@@ -27,7 +27,7 @@ module ThorActionsExtend
       option = question[:option]
       title = question[:title]
       type = question[:type]
-      # binding.pry
+
       case type
       when 'with_default'
         return default if @options[option].nil?
@@ -43,7 +43,7 @@ module ThorActionsExtend
       when 'ask_with_options'
         return @options[option] if @options[option]
 
-        ask(title, limited_to: question[:ask_options])
+        instance_variable_set("@#{option}".to_sym, ask(title, limited_to: question[:ask_options]))
       else
         raise "Invalid question type: #{type}"
       end
