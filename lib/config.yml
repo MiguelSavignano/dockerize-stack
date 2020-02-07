@@ -2,11 +2,13 @@ rails:
   questions:
     - option: ruby_version
       title: "Ruby Version (default 2.5.6):"
+      description: Ruby version
       default: "2.5.6"
       type: ask_with_default
 
     - option: javascrit_package_manager
       title: What is your Javascript package manager?
+      description: Yarn version
       default: "./"
       type: ask_with_options
       ask_options:
@@ -16,6 +18,7 @@ rails:
 
     - option: database
       title: What is your Database?
+      description: Database type
       default: "./"
       type: ask_with_options
       ask_options:
@@ -24,16 +27,19 @@ rails:
 
     - option: rails_worker
       title: You need workers with sidekiq? y/n, (default y)
+      description: Rails sidekiq examples in docker-compose.yml
       default: "./"
       type: ask_with_default_boolean
 
     - option: github_private
       title: You need github token for private gems? y/n (default no)
+      description: Set GITHUB_USERNAME and GITHUB_TOKEN in dockerfile bundle config
       default: "./"
       type: ask_with_default_boolean
 
     - option: kubernetes
       title: You want generate docker-stack for kubernetes? y/n (default no)
+      description: Basic examples for kubernetes config (minikube)
       default: "./"
       type: ask_with_default_boolean
 
