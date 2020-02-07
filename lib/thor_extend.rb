@@ -10,7 +10,7 @@ module ThorActionsExtend
     symbolize_names: true
   )
 
-  def run(options, template_type = :rails)
+  def run(options, template_type)
     @template_type = template_type
     @options = options
     @output_folder = options[:output_folder]
@@ -18,7 +18,6 @@ module ThorActionsExtend
     self.class.source_root(template_folder)
 
     fetch_template_variables
-    # render_templates
   end
 
   def fetch_template_variables
