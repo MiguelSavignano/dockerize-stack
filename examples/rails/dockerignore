@@ -1,0 +1,20 @@
+# Ignore all files from .gitignore
+# echo .git > .dockerignore && cat .gitignore >> .dockerignore
+
+/log/*
+/tmp/*
+
+.byebug_history
+
+volumes
+
+
+public/packs
+public/packs-test
+public/uploads
+
+node_modules
+coverage
+yarn-error.log
+.DS_Store
+.git
