@@ -2,7 +2,6 @@
 
 require 'yaml'
 require 'json'
-require 'pry'
 
 module ThorActionsExtend
   include Thor::Actions
