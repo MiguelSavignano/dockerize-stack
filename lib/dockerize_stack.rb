@@ -32,6 +32,8 @@ module DockerizeStack
         file_name = file_path.gsub('/templates/rails', '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
+      render_template! '.dockerignore.erb'
+
       puts 'Update your database.yml based in database-docker.yml'
     end
 
@@ -46,6 +48,7 @@ module DockerizeStack
         file_name = file_path.gsub('/templates/react', '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
+      render_template! '.dockerignore.erb'
     end
   end
 end
