@@ -15,7 +15,7 @@ module ThorActionsExtend
   def run(options, template_type)
     @template_type = template_type
     @options = options
-    @output_folder = options[:output_folder]
+    @output_folder = options["output_folder"]
     @config = CONFIG[@template_type]
     self.class.source_root(template_folder)
 
@@ -28,25 +28,25 @@ module ThorActionsExtend
       option = question[:option]
       title = question[:title]
       type = question[:type]
+      return instance_variable_set("@#{option}", @options[option]) if @options[option]
 
       case type
       when 'with_default'
-        return default if @options[option].nil?
-
-        @options[option]
-        instance_variable_set("@#{option}".to_sym, @options[option])
+        instance_variable_set("@#{option}", default)
       when 'ask_with_default'
-        return @options[option] unless @options[option].nil?
-
         result = ask(title)
         result == '' ? default : result
-        instance_variable_set("@#{option}".to_sym, result)
-      when 'ask_with_default_boolean'
-        instance_variable_set("@#{option}".to_sym, ask_with_default_boolean(question))
-      when 'ask_with_options'
-        return @options[option] if @options[option]
 
-        instance_variable_set("@#{option}".to_sym, ask(title, limited_to: question[:ask_options]))
+        instance_variable_set("@#{option}", result)
+      when 'ask_with_default_boolean'
+        result = ask(title)
+        return default if result == ''
+
+        result = %w[yes y true].include?(result) ? true : false
+
+        instance_variable_set("@#{option}", result)
+      when 'ask_with_options'
+        instance_variable_set("@#{option}", ask(title, limited_to: question[:ask_options]))
       else
         raise "Invalid question type: #{type}"
       end
@@ -85,22 +85,6 @@ module ThorActionsExtend
     result = ask(@config[:questions][option])
 
     result == '' ? default : result
-  end
-
-  def ask_with_options(option, limited_to = nil)
-    return @options[option] if @options[option]
-
-    limited_to = @config[:defaults][option] if limited_to.nil?
-    ask(@config[:questions][option], limited_to: limited_to)
-  end
-
-  def ask_with_default_boolean(option:, title:, default:, type:, description:)
-    return option if @options[option]
-
-    result = ask(title)
-    return default if result == ''
-
-    %w[yes y true].include?(result) ? true : false
   end
 
   def append_or_create(file_path, file_content)
