@@ -55,6 +55,10 @@ module ThorActionsExtend
 
   private
 
+  def all_file_paths(type)
+    Dir.glob("./templates/#{type.to_s}/**/*").select{|x| !File.directory?(x) }
+  end
+
   def render_template(template_file)
     result = ERB.new(File.read("#{template_folder}/#{template_file}")).result(binding)
     File.write("#{@output_folder}/#{template_file.gsub('.erb', '')}", result)
