@@ -44,6 +44,7 @@ CMD "./entrypoint.sh"
 # ****************************
 
 FROM builder as production-builder
+ENV NODE_ENV=production RAILS_ENV=production
 
 # Build production assets
 RUN bundle exec rails assets:precompile
