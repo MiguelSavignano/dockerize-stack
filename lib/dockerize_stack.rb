@@ -24,14 +24,21 @@ module DockerizeStack
     desc 'rails', 'generate docker files for rails application'
     def rails
       run(options, :rails)
-      render_template 'Dockerfile.erb'
-      render_template 'dockerignore.erb', '.dockerignore'
-      directory 'nginx', "#{@output_folder}/nginx"
-      render_template 'Dockerfile.erb'
-      render_template 'entrypoint.sh.erb'
-      render_template 'docker-compose.yml.erb'
-      render_template 'config/database-docker.yml.erb'
-      render_template 'dockerignore.erb', '.dockerignore'
+
+      Dir.glob("./templates/rails/**/*").select{|x| !File.directory?(x) }.each do |file_path|
+        file_name = file_path.gsub("/templates/rails", "")
+        render_template file_name
+      end
+
+      # Dir.glob("./templates/rails/**/*")
+      # render_template 'Dockerfile.erb'
+      # render_template 'dockerignore.erb', '.dockerignore'
+      # directory 'nginx', "#{@output_folder}/nginx"
+      # render_template 'Dockerfile.erb'
+      # render_template 'entrypoint.sh.erb'
+      # render_template 'docker-compose.yml.erb'
+      # render_template 'config/database-docker.yml.erb'
+      # render_template 'dockerignore.erb', '.dockerignore'
 
       directory 'kubernetes', "#{@output_folder}/kubernetes" if @kubernetes
       puts 'Update your database.yml based in database-docker.yml'

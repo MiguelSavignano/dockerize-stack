@@ -88,7 +88,7 @@ module ThorActionsExtend
     ask(@config[:questions][option], limited_to: limited_to)
   end
 
-  def ask_with_default_boolean(option:, title:, default:, type:)
+  def ask_with_default_boolean(option:, title:, default:, type:, description:)
     return option unless option.nil?
 
     result = ask(title)
