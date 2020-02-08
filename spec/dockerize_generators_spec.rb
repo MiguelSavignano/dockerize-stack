@@ -7,15 +7,15 @@ describe 'DockerizeStack::Rails' do
   it '#rails' do
     generator = DockerizeStack::Command.new
     generator.options = {
-      "output_folder" => './examples/rails',
-      "ruby_version" => '2.5.6',
-      "nodejs_version" => '10.16.3',
-      "yarn_version" => '1.17.3',
-      "javascrit_package_manager" => 'npm',
-      "database" => 'postgresql',
-      "rails_worker" => false,
-      "github_private" => false,
-      "kubernetes" => false
+      'output_folder' => './examples/rails',
+      'ruby_version' => '2.5.6',
+      'nodejs_version' => '10.16.3',
+      'yarn_version' => '1.17.3',
+      'javascrit_package_manager' => 'npm',
+      'database' => 'postgresql',
+      'rails_worker' => false,
+      'github_private' => false,
+      'kubernetes' => false
     }
 
     generator.rails

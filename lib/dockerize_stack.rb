@@ -25,9 +25,11 @@ module DockerizeStack
     def rails
       run(options, :rails)
       all_file_paths(:rails).each do |file_path|
-        return false if file_path =~ /.\/templates\/rails\/kubernetes/ && !@kubernetes
+        if file_path =~ %r{./templates/rails/kubernetes} && !@kubernetes
+          return false
+        end
 
-        file_name = file_path.gsub("/templates/rails", "")
+        file_name = file_path.gsub('/templates/rails', '')
         render_template file_name
       end
       puts 'Update your database.yml based in database-docker.yml'

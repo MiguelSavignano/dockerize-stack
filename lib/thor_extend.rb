@@ -15,7 +15,7 @@ module ThorActionsExtend
   def run(options, template_type)
     @template_type = template_type
     @options = options
-    @output_folder = options["output_folder"]
+    @output_folder = options['output_folder']
     @config = CONFIG[@template_type]
     self.class.source_root(template_folder)
 
@@ -45,7 +45,6 @@ module ThorActionsExtend
       when 'ask_with_default_boolean'
         result = ask(title)
         result = default if result == ''
-
         result = %w[yes y true].include?(result) ? true : false
 
         instance_variable_set("@#{option}", result)
@@ -60,7 +59,7 @@ module ThorActionsExtend
   private
 
   def all_file_paths(type)
-    Dir.glob("./templates/#{type.to_s}/**/*").select{|x| !File.directory?(x) }
+    Dir.glob("./templates/#{type}/**/*").reject { |x| File.directory?(x) }
   end
 
   def render_template(template_file)
