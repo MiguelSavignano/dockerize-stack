@@ -2,16 +2,19 @@
 # ******Build base stage******
 # ****************************
 
-FROM node:-slim as nodejs
+FROM node:10.16.3-slim as nodejs
 
-FROM ruby:-slim as builder
+FROM ruby:2.5.6-slim as builder
 
 # Install common libs
 RUN apt-get update -qq && apt-get install -y \
   build-essential vim git
 
+# Install Postgresql
+RUN apt-get install -y postgresql-client libpq-dev
+
 # Install Nodejs
-ENV NODE_VERSION=
+ENV NODE_VERSION=10.16.3
 COPY --from=nodejs /usr/local/bin/ /usr/local/bin/
 COPY --from=nodejs /usr/local/lib/ /usr/local/lib/
 
@@ -51,7 +54,7 @@ RUN rm -r node_modules
 # ******Final production Stage******
 # **********************************
 
-FROM ruby:-slim
+FROM ruby:2.5.6-slim
 
 ENV NODE_ENV=production RAILS_ENV=production RAILS_LOG_TO_STDOUT=true
 

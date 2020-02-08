@@ -24,7 +24,6 @@ module DockerizeStack
     desc 'rails', 'generate docker files for rails application'
     def rails
       run(options, :rails)
-
       all_file_paths(:rails).each do |file_path|
         return false if file_path =~ /.\/templates\/rails\/kubernetes/ && !@kubernetes
 

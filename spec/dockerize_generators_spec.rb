@@ -23,13 +23,13 @@ describe 'DockerizeStack::Rails' do
     # docker build -t dockerize-stak-rails-example -f Dockerfile examples/rails
   end
 
-  it '#react' do
-    generator = DockerizeStack::Command.new
-    generator.options = {
-      "output_folder" => './examples/react-create-app',
-      "nodejs_version" => '10.16.3'
-    }
+  # it '#react' do
+  #   generator = DockerizeStack::Command.new
+  #   generator.options = {
+  #     "output_folder" => './examples/react-create-app',
+  #     "nodejs_version" => '10.16.3'
+  #   }
 
-    generator.react
-  end
+  #   generator.react
+  # end
 end

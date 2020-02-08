@@ -28,7 +28,11 @@ module ThorActionsExtend
       option = question[:option]
       title = question[:title]
       type = question[:type]
-      return instance_variable_set("@#{option}", @options[option]) if @options[option]
+
+      if @options[option] || @options[option] == false
+        instance_variable_set("@#{option}", @options[option])
+        next
+      end
 
       case type
       when 'with_default'
@@ -40,7 +44,7 @@ module ThorActionsExtend
         instance_variable_set("@#{option}", result)
       when 'ask_with_default_boolean'
         result = ask(title)
-        return default if result == ''
+        result = default if result == ''
 
         result = %w[yes y true].include?(result) ? true : false
 
