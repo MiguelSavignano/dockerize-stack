@@ -62,32 +62,12 @@ module ThorActionsExtend
     Dir.glob("./templates/#{type}/**/*").reject { |x| File.directory?(x) }
   end
 
-  def render_template(template_file)
-    result = ERB.new(File.read("#{template_folder}/#{template_file}")).result(binding)
-    File.write("#{@output_folder}/#{template_file.gsub('.erb', '')}", result)
-  end
-
   def template_folder
     @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{@template_type}"
   end
 
   def render_template(path, target_path = path)
     template path, "#{@output_folder}/#{target_path.gsub('.erb', '')}"
-  end
-
-  def with_default(option)
-    return @config[:defaults][option] if @options[option].nil?
-
-    @options[option]
-  end
-
-  def ask_with_default(option, default = nil)
-    return @options[option] unless @options[option].nil?
-
-    default = @config[:defaults][option] if default.nil?
-    result = ask(@config[:questions][option])
-
-    result == '' ? default : result
   end
 
   def append_or_create(file_path, file_content)
