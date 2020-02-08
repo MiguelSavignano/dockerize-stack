@@ -34,13 +34,15 @@ module ThorActionsExtend
         return default if @options[option].nil?
 
         @options[option]
+        instance_variable_set("@#{option}".to_sym, @options[option])
       when 'ask_with_default'
         return @options[option] unless @options[option].nil?
 
         result = ask(title)
         result == '' ? default : result
+        instance_variable_set("@#{option}".to_sym, result)
       when 'ask_with_default_boolean'
-        ask_with_default_boolean(question)
+        instance_variable_set("@#{option}".to_sym, ask_with_default_boolean(question))
       when 'ask_with_options'
         return @options[option] if @options[option]
 
@@ -89,7 +91,7 @@ module ThorActionsExtend
   end
 
   def ask_with_default_boolean(option:, title:, default:, type:, description:)
-    return option unless option.nil?
+    return option if @options[option]
 
     result = ask(title)
     return default if result == ''
