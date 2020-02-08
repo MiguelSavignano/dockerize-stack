@@ -1,28 +1,56 @@
 rails:
-  defaults:
-    ruby_version: "2.5.6"
-    nodejs_version: "10.16.3"
-    yarn_version: "1.17.3"
-    javascrit_package_manager:
-      - asset_pipeline
-      - yarn
-      - npm
-    database:
-      - postgresql
-      - mysql
-    rails_worker: true
-    github_private: false
-    kubernetes: false
   questions:
-    ruby_version: "Ruby Version (default 2.5.6):"
-    javascrit_package_manager: What is your Javascript package manager?
-    database: What is your Database?
-    rails_worker: You need workers with sidekiq? y/n, (default y)
-    github_private: You need github token for private gems? y/n (default no)
-    kubernetes: You want generate docker-stack for kubernetes? y/n (default no)'
+    - option: ruby_version
+      title: "Ruby Version (default 2.5.6):"
+      description: Ruby version
+      default: "2.5.6"
+      type: ask_with_default
+
+    - option: nodejs_version
+      title: "Nodejs version (default 10.16.3):"
+      default: "10.16.3"
+      type: with_default
+
+    - option: javascrit_package_manager
+      title: What is your Javascript package manager?
+      description: Yarn version
+      default: "./"
+      type: ask_with_options
+      ask_options:
+        - asset_pipeline
+        - yarn
+        - npm
+
+    - option: database
+      title: What is your Database?
+      description: Database type
+      default: "./"
+      type: ask_with_options
+      ask_options:
+        - postgresql
+        - mysql
+
+    - option: rails_worker
+      title: You need workers with sidekiq? y/n, (default y)
+      description: Rails sidekiq examples in docker-compose.yml
+      default: "./"
+      type: ask_with_default_boolean
+
+    - option: github_private
+      title: You need github token for private gems? y/n (default no)
+      description: Set GITHUB_USERNAME and GITHUB_TOKEN in dockerfile bundle config
+      default: "./"
+      type: ask_with_default_boolean
+
+    - option: kubernetes
+      title: You want generate docker-stack for kubernetes? y/n (default no)
+      description: Basic examples for kubernetes config (minikube)
+      default: "./"
+      type: ask_with_default_boolean
 
 react:
-  defaults:
-    nodejs_version: "10.16.3"
   questions:
-    nodejs_version: "Nodejs version (default 10.16.3):"
+    - option: nodejs_version
+      title: "Nodejs version (default 10.16.3):"
+      default: "10.16.3"
+      type: ask_with_default

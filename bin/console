@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'pry'
 require_relative '../lib/dockerize_stack'
-DockerizeStack::Command.start(ARGV)
+
+Pry.start

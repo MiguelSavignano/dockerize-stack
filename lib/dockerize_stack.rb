@@ -1,13 +1,12 @@
+# frozen_string_literal: true
+
 require 'thor'
 require_relative './thor_extend.rb'
-require_relative './dockerize_stack/react.rb'
-require_relative './dockerize_stack/rails.rb'
 
 module DockerizeStack
   class Command < Thor
     include Thor::Actions
     include ThorActionsExtend
-    RAILS_CONFIG_DEFAULTS = CONFIG.dig(:rails, :defaults)
 
     option :template_folder,
            aliases: 't',
@@ -16,38 +15,26 @@ module DockerizeStack
            default: '.',
            aliases: 'o',
            desc: 'Output folder'
-    option :ruby_version,
-           banner: RAILS_CONFIG_DEFAULTS[:ruby_version],
-           desc: 'Ruby version'
-    option :javascrit_package_manager,
-           banner: 'npm',
-           enum: RAILS_CONFIG_DEFAULTS[:javascrit_package_manager]
-    option :nodejs_version,
-           banner: RAILS_CONFIG_DEFAULTS[:nodejs_version],
-           desc: 'Nodejs version'
-    option :yarn_version,
-           banner: RAILS_CONFIG_DEFAULTS[:yarn_version],
-           desc: 'Yarn version'
-    option :database,
-           banner: 'postgresql',
-           enum: RAILS_CONFIG_DEFAULTS[:database],
-           desc: 'Database type'
-    option :rails_worker,
-           type: :boolean,
-           banner: RAILS_CONFIG_DEFAULTS[:rails_worker],
-           desc: 'Rails sidekiq examples in docker-compose.yml'
-    option :github_private,
-           type: :boolean,
-           banner: RAILS_CONFIG_DEFAULTS[:github_private],
-           desc: 'Set GITHUB_USERNAME and GITHUB_TOKEN in dockerfile bundle config'
-    option :kubernetes,
-           type: :boolean,
-           banner: RAILS_CONFIG_DEFAULTS[:kubernetes],
-           desc: 'Basic examples for kubernetes config (minikube)'
+
+    CONFIG[:rails][:questions].each do |question|
+      option question[:option],
+             desc: question[:title]
+    end
 
     desc 'rails', 'generate docker files for rails application'
     def rails
-      DockerizeStack::Rails.new.run(options)
+      run(options, :rails)
+      all_file_paths(:rails).each do |file_path|
+        if file_path =~ %r{./templates/rails/kubernetes} && !@kubernetes
+          return false
+        end
+
+        file_name = file_path.gsub('/templates/rails', '')
+        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
+      end
+      render_template! '.dockerignore.erb'
+
+      puts 'Update your database.yml based in database-docker.yml'
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
@@ -56,7 +43,12 @@ module DockerizeStack
 
     desc 'react', 'generate docker files for create react app'
     def react
-      DockerizeStack::React.new.run(options)
+      run(options, :react)
+      all_file_paths(:react).each do |file_path|
+        file_name = file_path.gsub('/templates/react', '')
+        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
+      end
+      render_template! '.dockerignore.erb'
     end
   end
 end
