@@ -30,7 +30,7 @@ module DockerizeStack
         end
 
         file_name = file_path.gsub('/templates/rails', '')
-        render_template file_name
+        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
       puts 'Update your database.yml based in database-docker.yml'
     end
@@ -42,9 +42,10 @@ module DockerizeStack
     desc 'react', 'generate docker files for create react app'
     def react
       run(options, :react)
-      render_template 'Dockerfile.erb'
-      render_template 'dockerignore.erb', '.dockerignore'
-      directory 'nginx', "#{@output_folder}/nginx"
+      all_file_paths(:react).each do |file_path|
+        file_name = file_path.gsub('/templates/react', '')
+        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
+      end
     end
   end
 end

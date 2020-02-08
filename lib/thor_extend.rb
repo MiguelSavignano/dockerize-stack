@@ -66,10 +66,6 @@ module ThorActionsExtend
     @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{@template_type}"
   end
 
-  def render_template(path, target_path = path)
-    template path, "#{@output_folder}/#{target_path.gsub('.erb', '')}"
-  end
-
   def append_or_create(file_path, file_content)
     if File.exist?(file_path)
       append_to_file file_path, file_content
