@@ -49,7 +49,7 @@ jobs:
         run: bundle install --jobs 4 --retry 3
 
       - name: Publish to RubyGems
-        uses: devmasx/publish-rubygems-action@master
+        uses: cadwallion/publish-rubygems-action@master
         env:
           RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
           RELEASE_COMMAND: rake release
