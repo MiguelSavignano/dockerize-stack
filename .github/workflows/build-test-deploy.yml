@@ -40,6 +40,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Build
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          gem install rspec
+
       - name: Publish to RubyGems
         uses: devmasx/publish-rubygems-action@master
         env:
