@@ -10,14 +10,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby_version: ["2.6.x", "2.5.x", "2.4.x", "2.2.x"]
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Set up Ruby 2.6
+      - name: Set up Ruby versions
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.6.x
+          ruby-version: ${{ matrix.ruby_version }}
 
       - name: Build
         run: |
