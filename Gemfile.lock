@@ -29,6 +29,3 @@ DEPENDENCIES
   pry
   rspec
   thor
-
-BUNDLED WITH
-   1.16.1
