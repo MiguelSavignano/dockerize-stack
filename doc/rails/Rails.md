@@ -5,6 +5,20 @@
 [docker-compose.yml](examples/rails/docker-compose.yml)
 [Dockerfile](examples/rails/Dockerfile)
 
+## Build for development
+
+By default the Dockerfile config is for production enviroment; using docker multistage feature and ARG (Build arguments) at the build time this Dockerfile is the same for development and production.
+
+Build a docker image for development enviroment:
+
+```
+docker build -t rails-example \
+ --build-arg=BUNDLE_DEPLOYMENT="false" \
+ --build-arg=BUNDLE_WITHOUT="" \
+ --build-arg=NODE_ENV="" \
+ .
+```
+
 ## Common problems
 
 This problems base on Dockerfile and docker-compose.yml files that are suggested in the docker docs [examples](https://docs.docker.com/compose/rails/#define-the-project)

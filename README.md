@@ -1,16 +1,12 @@
 # Dockerize Stack
 
-This it's a generator for generate Dockerfile and docker-compose for your application for development and production
+This it's a generator for generate Dockerfile and docker-compose for your application
 
 ## Why?
 
 - Help to configure multiple applications using the same templates.
 
-- For build a quick stack for your development enviroment docker is the best tool you can use, but you need to configure the Dockerfile docker-compose, persisted database data, set the entrypoint...
-
-- For deploy to kubernetes you need first Dockerfile for your application, this templates help to build optimize docker image for productions enviroments.
-
-- Using templates is more easy customize docker build process (Dockerfile, docker-compose).
+- Using templates is more easy to dockerize diferent type of projects.
 
 ## Install
 
@@ -40,22 +36,20 @@ docker run --user $(id -u) -it -v $(pwd):/usr/src devmasx/dockerize-stack rails
 
 [rails example](./examples/rails)
 
-By default the Dockerfile config is for production enviroment; using docker multistage feature and ARG (Build arguments) at the build time this Dockerfile is the same for development and production.
-
 See all options:
 
 ```
-dockerize-stack help rails
-```
-
-Build a docker image for development enviroment:
-
-```
-docker build -t rails-example \
- --build-arg=BUNDLE_DEPLOYMENT="false" \
- --build-arg=BUNDLE_WITHOUT="" \
- --build-arg=NODE_ENV="" \
- .
+Options:
+  t, [--template-folder=TEMPLATE_FOLDER]                       # Template folder path
+  o, [--output-folder=OUTPUT_FOLDER]                           # Output folder
+                                                               # Default: .
+      [--ruby-version=RUBY_VERSION]                            # Ruby Version (default 2.5.6):
+      [--nodejs-version=NODEJS_VERSION]                        # Nodejs version (default 10.16.3):
+      [--javascrit-package-manager=JAVASCRIT_PACKAGE_MANAGER]  # What is your Javascript package manager?
+      [--database=DATABASE]                                    # What is your Database?
+      [--rails-worker=RAILS_WORKER]                            # You need workers with sidekiq? y/n, (default y)
+      [--github-private=GITHUB_PRIVATE]                        # You need github token for private gems? y/n (default no)
+      [--kubernetes=KUBERNETES]                                # You want generate docker-stack for kubernetes? y/n (default no)
 ```
 
 ## TODO

@@ -13,8 +13,8 @@ rails:
 
     - option: javascrit_package_manager
       title: What is your Javascript package manager?
-      description: Yarn version
-      default: "./"
+      description: Select the package manager for Javascript modules
+      default: "yarn"
       type: ask_with_options
       ask_options:
         - asset_pipeline
@@ -24,7 +24,7 @@ rails:
     - option: database
       title: What is your Database?
       description: Database type
-      default: "./"
+      default: "postgresql"
       type: ask_with_options
       ask_options:
         - postgresql
@@ -33,19 +33,19 @@ rails:
     - option: rails_worker
       title: You need workers with sidekiq? y/n, (default y)
       description: Rails sidekiq examples in docker-compose.yml
-      default: "./"
+      default: "y"
       type: ask_with_default_boolean
 
     - option: github_private
       title: You need github token for private gems? y/n (default no)
       description: Set GITHUB_USERNAME and GITHUB_TOKEN in dockerfile bundle config
-      default: "./"
+      default: "y"
       type: ask_with_default_boolean
 
     - option: kubernetes
       title: You want generate docker-stack for kubernetes? y/n (default no)
       description: Basic examples for kubernetes config (minikube)
-      default: "./"
+      default: "n"
       type: ask_with_default_boolean
 
 react:
