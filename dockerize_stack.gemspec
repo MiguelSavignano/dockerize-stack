@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'Generate Dockerfile and docker-compose for your application'
   s.authors     = ['Miguel Savignano']
   s.email       = 'migue.masx@gmail.com'
-  s.files       = Dir.glob('{bin,lib,templates}/**/*') + %w[LICENSE README.md]
+  s.files       = Dir.glob('{bin,lib,templates}/**/{*,.?*}') + %w[LICENSE README.md]
   s.homepage    = 'https://github.com/MiguelSavignano/dockerize-stack'
   s.license     = 'MIT'
   s.require_paths = ['lib']

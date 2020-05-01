@@ -63,7 +63,7 @@ module ThorActionsExtend
   end
 
   def all_file_paths(type)
-    Dir.glob("./templates/#{type}/**/*").reject { |x| File.directory?(x) }
+    Dir.glob("./templates/#{type}/**/{*,.?*}").reject { |x| File.directory?(x) }
   end
 
   def template_folder

@@ -8,13 +8,8 @@ module DockerizeStack
     include Thor::Actions
     include ThorActionsExtend
 
-    option :template_folder,
-           aliases: 't',
-           desc: 'Template folder path'
-    option :output_folder,
-           default: '.',
-           aliases: 'o',
-           desc: 'Output folder'
+    option :template_folder, aliases: 't', desc: 'Template folder path'
+    option :output_folder, default: '.', aliases: 'o', desc: 'Output folder'
 
     CONFIG[:rails][:questions].each do |question|
       option question[:option],
@@ -28,18 +23,18 @@ module DockerizeStack
         if file_path =~ %r{./templates/rails/kubernetes} && !@kubernetes
           return false
         end
-
         file_name = file_path.gsub('/templates/rails', '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
-      render_template! '.dockerignore.erb'
 
       puts 'Update your database.yml based in database-docker.yml'
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
     option :output_folder, default: '.', aliases: 'o', desc: 'Output folder'
-    option :nodejs_version, banner: '10.16.3', dec: 'Nodejs version'
+    CONFIG[:react][:questions].each do |question|
+      option question[:option], desc: question[:title]
+    end
 
     desc 'react', 'generate docker files for create react app'
     def react
@@ -48,7 +43,6 @@ module DockerizeStack
         file_name = file_path.gsub('/templates/react', '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
-      render_template! '.dockerignore.erb'
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
@@ -66,7 +60,6 @@ module DockerizeStack
         file_name = file_path.gsub("/templates/#{@type}", '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
-      render_template! '.dockerignore.erb'
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
@@ -84,7 +77,6 @@ module DockerizeStack
         file_name = file_path.gsub("/templates/#{@type}", '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
-      render_template! '.dockerignore.erb'
     end
   end
 end
