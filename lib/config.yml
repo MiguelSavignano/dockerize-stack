@@ -60,3 +60,9 @@ gatsby:
       title: "Nodejs version (default 10.17.0):"
       default: "10.17.0"
       type: ask_with_default
+strapi:
+  questions:
+    - option: nodejs_version
+      title: "Nodejs version (default 10.17.0):"
+      default: "10.17.0"
+      type: ask_with_default

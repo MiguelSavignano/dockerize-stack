@@ -68,5 +68,23 @@ module DockerizeStack
       end
       render_template! '.dockerignore.erb'
     end
+
+    option :template_folder, aliases: 't', desc: 'Template folder path'
+    option :output_folder, default: '.', aliases: 'o', desc: 'Output folder'
+
+    CONFIG[:strapi][:questions].each do |question|
+      option question[:option], desc: question[:title]
+    end
+
+    desc 'strapi', 'generate docker files for strapi app'
+    def strapi
+      @type = :strapi
+      run(options, @type)
+      all_file_paths(@type).each do |file_path|
+        file_name = file_path.gsub("/templates/#{@type}", '')
+        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
+      end
+      render_template! '.dockerignore.erb'
+    end
   end
 end

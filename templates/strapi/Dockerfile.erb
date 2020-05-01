@@ -1,0 +1,15 @@
+# BUILD STAGE
+FROM node:<%= @nodejs_version %>-alpine as build
+
+# production setup
+# ENV NODE_ENV=production
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+CMD ["npx","strapi", "develop"]
+# production setup
+# CMD ["npx","strapi", "start"]
