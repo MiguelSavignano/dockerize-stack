@@ -54,3 +54,9 @@ react:
       title: "Nodejs version (default 10.16.3):"
       default: "10.16.3"
       type: ask_with_default
+gatsby:
+  questions:
+    - option: nodejs_version
+      title: "Nodejs version (default 10.17.0):"
+      default: "10.17.0"
+      type: ask_with_default
