@@ -16,7 +16,7 @@ module ThorActionsExtend
     @options = options
     @output_folder = options['output_folder']
     @config = CONFIG[@template_type]
-    self.class.source_root(template_folder)
+    self.class.source_root(template_type_path)
 
     fetch_template_variables
   end
@@ -57,17 +57,29 @@ module ThorActionsExtend
 
   private
 
-  def render_template!(template_file)
-    result = ERB.new(File.read("#{template_folder}/#{template_file}")).result(binding)
-    File.write("#{@output_folder}/#{template_file.gsub('.erb', '')}", result)
-  end
-
-  def all_file_paths(type)
-    Dir.glob("./templates/#{type}/**/{*,.?*}").reject { |x| File.directory?(x) }
-  end
-
   def template_folder
-    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates/#{@template_type}"
+    @options[:template_folder] || "#{File.dirname(__FILE__)}/../templates"
+  end
+
+  def template_type_path
+    "#{template_folder}/#{@template_type}"
+  end
+
+  def render_all
+    all_file_paths.each do |file_name|
+      template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
+    end
+  end
+
+  def all_file_paths
+    Dir.glob("#{template_type_path}/**/{*,.?*}")
+      .reject { |x| File.directory?(x) }
+      .map { |file_path| file_path.gsub("#{template_type_path}/", '') }
+  end
+
+  def render_template!(template_file)
+    result = ERB.new(File.read("#{template_type_path}/#{template_file}")).result(binding)
+    File.write("#{@output_folder}/#{template_file.gsub('.erb', '')}", result)
   end
 
   def append_or_create(file_path, file_content)

@@ -19,11 +19,10 @@ module DockerizeStack
     desc 'rails', 'generate docker files for rails application'
     def rails
       run(options, :rails)
-      all_file_paths(:rails).each do |file_path|
-        if file_path =~ %r{./templates/rails/kubernetes} && !@kubernetes
+      all_file_paths.each do |file_name|
+        if file_name =~ %r{kubernetes/} && !@kubernetes
           return false
         end
-        file_name = file_path.gsub('/templates/rails', '')
         template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
       end
 
@@ -39,10 +38,7 @@ module DockerizeStack
     desc 'react', 'generate docker files for create react app'
     def react
       run(options, :react)
-      all_file_paths(:react).each do |file_path|
-        file_name = file_path.gsub('/templates/react', '')
-        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
-      end
+      render_all
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
@@ -54,12 +50,8 @@ module DockerizeStack
 
     desc 'gatsby', 'generate docker files for gatsby app'
     def gatsby
-      @type = :gatsby
-      run(options, @type)
-      all_file_paths(@type).each do |file_path|
-        file_name = file_path.gsub("/templates/#{@type}", '')
-        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
-      end
+      run(options, :gatsby)
+      render_all
     end
 
     option :template_folder, aliases: 't', desc: 'Template folder path'
@@ -71,12 +63,8 @@ module DockerizeStack
 
     desc 'strapi', 'generate docker files for strapi app'
     def strapi
-      @type = :strapi
-      run(options, @type)
-      all_file_paths(@type).each do |file_path|
-        file_name = file_path.gsub("/templates/#{@type}", '')
-        template file_name, "#{@output_folder}/#{file_name.gsub('.erb', '')}"
-      end
+      run(options, :strapi)
+      render_all
     end
   end
 end
